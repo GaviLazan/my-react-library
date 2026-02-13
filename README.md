@@ -1,16 +1,125 @@
-# React + Vite
+# React Library Tracker
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+A personal library management app built with React, allowing you to track your book collection, reading status, lending history, and ratings.
 
-Currently, two official plugins are available:
+## Tech Stack
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) (or [oxc](https://oxc.rs) when used in [rolldown-vite](https://vite.dev/guide/rolldown)) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+- **React** (via Vite)
+- **localStorage** for data persistence
+- **axios** for API calls
+- **MUI (Material UI)** for UI components (added in Sprint 3)
 
-## React Compiler
+## Features
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+### Core Features
+- Add books via ISBN (Open Library API) or manually
+- Delete books with confirmation
+- Track reading status: Untagged, To Be Read, Currently Reading, Read, Did Not Finish
+- Lend books to friends with tracking (borrower name, lent date, overdue alerts)
+- Rate finished books (1-5 stars)
+- Real-time search by title or author
+- Filter by status and toggle lent book visibility
+- Sort by date added, title, or rating
+- Library statistics dashboard
 
-## Expanding the ESLint configuration
+### Data Model
+Each book contains:
+- `id`, `title`, `author`, `coverUrl`, `isbn`
+- `status`: `null | 'tbr' | 'reading' | 'read' | 'dnf'`
+- `rating`: 0-5 (only for read/DNF books)
+- `isLent`: boolean (separate from status)
+- `lentTo`, `lentDate` (lending metadata)
+- `dateAdded`
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+## Project Structure
+
+```
+src/
+├── api/              # API integration (Open Library, BookCover API)
+├── components/       # React components (BookCard, BookGrid, etc.)
+├── data/            # Seed data (library.json converted to seedData.json)
+├── utils/           # Utilities (storage, date helpers, seed function)
+├── App.jsx          # Main app component
+└── main.jsx         # React entry point
+```
+
+## Setup & Installation
+
+```bash
+# Clone the repo
+git clone <your-repo-url>
+cd my-react-library
+
+# Install dependencies
+npm install
+
+# Run dev server
+npm run dev
+```
+
+Visit `http://localhost:5173` in your browser.
+
+## Development Timeline
+
+### Sprint 0: Foundation ✅
+- Vite + React project setup
+- localStorage utilities (`getBooks`, `saveBooks`, `hasSeed`)
+- Seed function (migrates existing library.json data)
+- Basic BookCard and BookGrid components
+- CSS grid layout
+
+### Sprint 1: Add, Delete, Status, Lending (In Progress)
+- ISBN and manual book addition
+- Delete with confirmation
+- Status selector (null/TBR/reading/read/DNF)
+- Lending system (isLent overlay, not a status)
+- Overdue detection
+
+### Sprint 2: Filters, Search, Stats
+- Status filter bar
+- Real-time search
+- Sort controls
+- Library stats dashboard
+- Edit book functionality
+
+### Sprint 3: MUI Polish & QA
+- Replace plain HTML with MUI components
+- Visual polish (card elevation, glows, responsive layout)
+- Cross-browser testing
+- Presentation prep
+
+## Data Persistence
+
+- **First load:** Seeds localStorage from `seedData.json` (existing library data)
+- **Subsequent loads:** Reads from localStorage
+- **Auto-save:** All changes (add/delete/edit) automatically persist to localStorage
+- **Seeded flag:** Prevents re-seeding on reload, even if library is empty
+
+## API Integration
+
+- **Open Library API:** Fetches book metadata by ISBN
+- **BookCover API:** Primary source for cover images (fallback to Open Library)
+- **Attribution:** Open Library attribution displayed in footer
+
+## Known Issues
+
+- Some books may return "Unknown Author" from Open Library API (known upstream issue)
+- Cover quality varies by source availability
+
+## Academic Context
+
+This project was built as part of the SheCodes bootcamp React module. The original assignment was a To-Do List app, but was adapted to rebuild an existing vanilla JavaScript library tracker in React.
+
+**Learning objectives:**
+- React fundamentals (components, state, props, hooks)
+- Data persistence with localStorage
+- API integration and error handling
+- Component-driven architecture
+- MUI integration
+- Project planning and sprint-based development
+
+---
+
+**Built by:** Gavi Lazan
+**Course:** SheCodes Fullstack Bootcamp  
+**Presentation Date:** February 27, 2026
