@@ -1,0 +1,162 @@
+[
+  {
+    "id": 1769718550699,
+    "title": "The Way of Kings - part 1",
+    "author": "Brandon Sanderson",
+    "coverUrl": "https://m.media-amazon.com/images/I/71AcXT6kTBL._SY466_.jpg",
+    "isbn": "0575097361",
+    "isLent": false,
+    "lentTo": "",
+    "lentDate": null
+  },
+  {
+    "id": 1769719117959,
+    "title": "The Way of Kings - part 2",
+    "author": "Brandon Sanderson",
+    "coverUrl": "https://covers.openlibrary.org/b/id/10872505-M.jpg",
+    "isbn": "9780575102484",
+    "isLent": false,
+    "lentTo": "",
+    "lentDate": null
+  },
+  {
+    "id": 1769718687231,
+    "title": "Shadow and Bone",
+    "author": "Leigh Bardugo",
+    "coverUrl": "https://m.media-amazon.com/images/I/51LCJlg5oFS._SY445_SX342_FMwebp_.jpg",
+    "isbn": "1250027438",
+    "isLent": true,
+    "lentTo": "Manoli",
+    "lentDate": "14/09/25"
+  },
+  {
+    "id": 1769718757087,
+    "title": "Siege and Storm",
+    "author": "Leigh Bardugo",
+    "coverUrl": "https://m.media-amazon.com/images/I/81iTG5sYcoL._SY466_.jpg",
+    "isbn": "9781510105263",
+    "isLent": false,
+    "lentTo": "",
+    "lentDate": null
+  },
+  {
+    "id": 1769718962344,
+    "title": "Ruin and Rising",
+    "author": "Leigh Bardugo",
+    "coverUrl": "https://m.media-amazon.com/images/I/51-1gecDc4L._SY445_SX342_FMwebp_.jpg",
+    "isbn": "9781510105256",
+    "isLent": false,
+    "lentTo": "",
+    "lentDate": null
+  },
+  {
+    "id": 1769719288604,
+    "title": "Tress of the Emerald Sea",
+    "author": "Brandon Sanderson",
+    "coverUrl": "https://uploads.coppermind.net/thumb/Tress_US_Cover.jpg/154px-Tress_US_Cover.jpg",
+    "isbn": "9781938570322",
+    "isLent": false,
+    "lentTo": "",
+    "lentDate": null
+  },
+  {
+    "id": 1769719454627,
+    "title": "Yumi and the Nightmare Painter",
+    "author": "Brandon Sanderson",
+    "coverUrl": "https://covers.openlibrary.org/b/id/14397237-M.jpg",
+    "isbn": "9781938570377",
+    "isLent": false,
+    "lentTo": "",
+    "lentDate": null
+  },
+  {
+    "id": 1769719472244,
+    "title": "All Our Wrong Todays",
+    "author": "Elan Mastai",
+    "coverUrl": "https://covers.openlibrary.org/b/id/8816580-M.jpg",
+    "isbn": "9781101985151",
+    "isLent": false,
+    "lentTo": "",
+    "lentDate": null
+  },
+  {
+    "id": 1769719472245,
+    "title": "זמן טעות",
+    "author": "אילן מסטאי",
+    "coverUrl": "https://images-evrit.yit.co.il/Images/Products/covers_2018/time_master.jpg",
+    "isbn": "1002790838",
+    "isLent": false,
+    "lentTo": "",
+    "lentDate": null
+  },
+  {
+    "id": 1769719485982,
+    "title": "Way Back",
+    "author": "Gavriel Savit",
+    "coverUrl": "https://covers.openlibrary.org/b/id/10527725-M.jpg",
+    "isbn": "9781984894625",
+    "isLent": false,
+    "lentTo": "",
+    "lentDate": null
+  },
+  {
+    "id": 1769717045958,
+    "title": "Elantris",
+    "author": "Brandon Sanderson",
+    "coverUrl": "https://covers.openlibrary.org/b/id/8573069-M.jpg",
+    "isbn": "1473217709",
+    "isLent": false,
+    "lentDate": null,
+    "lentTo": ""
+  },
+  {
+    "id": 1769719472234,
+    "title": "סימנטוב",
+    "author": "אסף אשרי",
+    "coverUrl": "https://images-evrit.yit.co.il/Images/Products/KinneretMasters/cimantov_master.jpg",
+    "isbn": "30013668",
+    "isLent": false,
+    "lentTo": "",
+    "lentDate": null
+  },
+  {
+    "id": 1769720022289,
+    "title": "Assassin's Apprentice",
+    "author": "Robin Hobb",
+    "coverUrl": "https://m.media-amazon.com/images/I/81vDRQ8wHfL._SY466_.jpg",
+    "isbn": "9780553897487",
+    "isLent": false,
+    "lentTo": "",
+    "lentDate": null
+  },
+  {
+    "id": 1769718710087,
+    "title": "A Short History of Nearly Everything",
+    "author": "Bill Bryson",
+    "coverUrl": "https://m.media-amazon.com/images/I/71mqPtS-KzL._SL1500_.jpg",
+    "isbn": "0552997048",
+    "isLent": true,
+    "lentTo": "Aliza",
+    "lentDate": "10/01/26"
+  },
+  {
+    "id": 1769719815018,
+    "title": "Down under",
+    "author": "Bill Bryson",
+    "coverUrl": "https://m.media-amazon.com/images/I/41MxYvc-dGL._SY445_SX342_FMwebp_.jpg",
+    "isbn": "9780552997034",
+    "isLent": false,
+    "lentTo": "",
+    "lentDate": null
+  },
+  {
+    "id": 1769967383596,
+    "title": "The Hobbit",
+    "author": "J.R.R. Tolkien",
+    "coverUrl": "https://covers.openlibrary.org/b/id/14623994-M.jpg",
+    "isbn": "0345339681",
+    "isLent": false,
+    "lentTo": "",
+    "lentDate": null
+  }
+]
