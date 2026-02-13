@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import { getBooks } from "./utils/storage";
 import seedLibrary from "./utils/seedLibrary";
+import BookGrid from "./components/BookGrid";
 
 function App() {
   const [books, setBooks] = useState([]);
@@ -16,11 +17,7 @@ function App() {
       <h1>My Library</h1>
       <p>Total books: {books.length}</p>
       {/* For now, just show book titles in a list */}
-      <ul>
-        {books.map((book) => (
-          <li key={book.id}>{book.title}</li>
-        ))}
-      </ul>
+      <BookGrid books={books}/>
     </div>
   );
 }
