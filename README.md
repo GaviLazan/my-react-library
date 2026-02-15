@@ -12,6 +12,7 @@ A personal library management app built with React, allowing you to track your b
 ## Features
 
 ### Core Features
+
 - Add books via ISBN (Open Library API) or manually
 - Delete books with confirmation
 - Track reading status: Untagged, To Be Read, Currently Reading, Read, Did Not Finish
@@ -23,7 +24,9 @@ A personal library management app built with React, allowing you to track your b
 - Library statistics dashboard
 
 ### Data Model
+
 Each book contains:
+
 - `id`, `title`, `author`, `coverUrl`, `isbn`
 - `status`: `null | 'tbr' | 'reading' | 'read' | 'dnf'`
 - `rating`: 0-5 (only for read/DNF books)
@@ -47,7 +50,7 @@ src/
 
 ```bash
 # Clone the repo
-git clone <your-repo-url>
+git clone https://github.com/GaviLazan/my-react-library.git
 cd my-react-library
 
 # Install dependencies
@@ -62,6 +65,7 @@ Visit `http://localhost:5173` in your browser.
 ## Development Timeline
 
 ### Sprint 0: Foundation ✅
+
 - Vite + React project setup
 - localStorage utilities (`getBooks`, `saveBooks`, `hasSeed`)
 - Seed function (migrates existing library.json data)
@@ -69,6 +73,7 @@ Visit `http://localhost:5173` in your browser.
 - CSS grid layout
 
 ### Sprint 1: Add, Delete, Status, Lending (In Progress)
+
 - ISBN and manual book addition
 - Delete with confirmation
 - Status selector (null/TBR/reading/read/DNF)
@@ -76,6 +81,7 @@ Visit `http://localhost:5173` in your browser.
 - Overdue detection
 
 ### Sprint 2: Filters, Search, Stats
+
 - Status filter bar
 - Real-time search
 - Sort controls
@@ -83,10 +89,10 @@ Visit `http://localhost:5173` in your browser.
 - Edit book functionality
 
 ### Sprint 3: MUI Polish & QA
+
 - Replace plain HTML with MUI components
 - Visual polish (card elevation, glows, responsive layout)
 - Cross-browser testing
-- Presentation prep
 
 ## Data Persistence
 
@@ -111,6 +117,7 @@ Visit `http://localhost:5173` in your browser.
 This project was built as part of the SheCodes bootcamp React module. The original assignment was a To-Do List app, but was adapted to rebuild an existing vanilla JavaScript library tracker in React.
 
 **Learning objectives:**
+
 - React fundamentals (components, state, props, hooks)
 - Data persistence with localStorage
 - API integration and error handling

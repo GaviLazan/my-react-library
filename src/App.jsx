@@ -1,7 +1,8 @@
 import { useState, useEffect } from "react";
-import { getBooks } from "./utils/storage";
+import { getBooks, saveBooks } from "./utils/storage";
 import seedLibrary from "./utils/seedLibrary";
 import BookGrid from "./components/BookGrid";
+import AddBookForm from "./components/AddBookForm";
 
 function App() {
   const [books, setBooks] = useState([]);
@@ -10,14 +11,37 @@ function App() {
     seedLibrary();
     const bookList = getBooks();
     setBooks(bookList);
-  }, []); // Empty array means this runs once on mount
+  }, []);
+
+  function handleAddBook(bookData) {
+    const newBook = {
+      ...bookData,
+      id: Date.now(),
+      status: null,
+      isLent: false,
+      rating: 0,
+      lentTo: "",
+      lentDate: "",
+      dateAdded: new Date().toISOString(),
+    };
+
+    const updatedBooks = [...books, newBook];
+    setBooks(updatedBooks);
+    saveBooks(updatedBooks);
+  }
+
+  function handleDelete(bookId) {
+    const updatedBooks = books.filter((book) => book.id !== bookId);
+    setBooks(updatedBooks);
+    saveBooks(updatedBooks);
+  }
 
   return (
     <div>
       <h1>My Library</h1>
+      <AddBookForm onAddBook={handleAddBook} />
       <p>Total books: {books.length}</p>
-      {/* For now, just show book titles in a list */}
-      <BookGrid books={books}/>
+      <BookGrid books={books} onDelete={handleDelete} />
     </div>
   );
 }

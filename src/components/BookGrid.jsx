@@ -1,13 +1,11 @@
 import BookCard from "./BookCard";
 
-function BookGrid({ books }) {
+export default function BookGrid({ books, onDelete}) {
   return (
     <div className="book-grid">
       {books.map((book) => (
-        <BookCard book={book} key={book.id} />
+        <BookCard book={book} key={book.id} onDelete={onDelete}/>
       ))}
     </div>
   );
 }
-
-export default BookGrid;
