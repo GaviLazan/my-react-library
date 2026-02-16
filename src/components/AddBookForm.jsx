@@ -16,7 +16,7 @@ export default function AddBookForm({ onAddBook }) {
       onAddBook(bookData);
       setIsbn("");
     } catch (error) {
-      alert("Error adding book");
+      alert(`Error adding book`);
     }
   };
 

@@ -34,8 +34,8 @@ export default function BookCard({ book, onDelete }) {
       ) : (
         <div>{book.title}</div>
       )}
-      <h3>{book.title}</h3>
-      <p>{book.author}</p>
+      <h3 dir="auto">{book.title}</h3>
+      <p dir="auto">{book.author}</p>
     </div>
   );
 }
