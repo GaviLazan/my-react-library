@@ -50,7 +50,7 @@ src/
 ├── utils/
 │   ├── storage.js          # localStorage utilities (getBooks, saveBooks, hasSeed)
 │   ├── seedLibrary.js      # Seed function (first-load migration)
-│   └── dateHelpers.js      # Date utilities for lending duration
+│   └── dateHelpers.js      # Date utilities for lending duration (*not cmplete*)
 ├── App.jsx                 # Main app component
 ├── main.jsx                # React entry point
 └── index.css               # Global styles

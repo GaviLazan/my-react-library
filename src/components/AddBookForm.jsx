@@ -3,11 +3,12 @@ import { fetchBookByISBN } from "../api/openLibrary";
 
 export default function AddBookForm({ onAddBook }) {
   const [isbn, setIsbn] = useState("");
+  const [errorMessage, setErrorMessage] = useState("");
 
   const handleSubmit = async (event) => {
     event.preventDefault();
     if (!isbn.trim()) {
-      alert("Please enter an ISBN");
+      setErrorMessage("Please enter an ISBN");
       return;
     }
 
@@ -15,8 +16,10 @@ export default function AddBookForm({ onAddBook }) {
       const bookData = await fetchBookByISBN(isbn);
       onAddBook(bookData);
       setIsbn("");
+      setErrorMessage("");
     } catch (error) {
-      alert(`Error adding book`);
+      setErrorMessage(`Error adding book: ${error.message}`);
+      return;
     }
   };
 
@@ -25,9 +28,13 @@ export default function AddBookForm({ onAddBook }) {
       <input
         placeholder="Enter ISBN"
         value={isbn}
-        onChange={(e) => setIsbn(e.target.value)}
+        onChange={(e) => {
+          setIsbn(e.target.value);
+          setErrorMessage("");
+        }}
       />
       <button type="submit">Add Book</button>
+      {errorMessage && <p className="error-message">{errorMessage}</p>}
     </form>
   );
 }

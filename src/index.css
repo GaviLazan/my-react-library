@@ -79,3 +79,34 @@ body {
   height: 20px;
   width: 20px;
 }
+
+.error-message {
+  color: red;
+  font-size: 12px;
+  margin-top: 4px;
+}
+
+.status-select {
+  margin-top: 8px;
+}
+
+/* Style based on selected value */
+.book-card[data-status="tbr"] {
+  background-color: #fff3cd;
+  color: #6b5104;
+}
+
+.book-card[data-status="reading"] {
+  background-color: #cfe2ff;
+  color: #084298;
+}
+
+.book-card[data-status="read"] {
+  background-color: #d1e7dd;
+  color: #0f5132;
+}
+
+.book-card[data-status="dnf"] {
+  background-color: #f8d7da;
+  color: #842029;
+}

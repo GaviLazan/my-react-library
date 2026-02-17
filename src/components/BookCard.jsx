@@ -1,11 +1,11 @@
-import { useState, useEffect } from "react";
+import { useState } from "react";
 
-export default function BookCard({ book, onDelete }) {
+export default function BookCard({ book, onDelete, onStatusChange }) {
   const [imageError, setImageError] = useState(false);
 
-  useEffect(() => {
-    setImageError(false);
-  }, [book.coverUrl]);
+  const handleStatusChange = (e) => {
+    onStatusChange(book.id, e.target.value);
+  };
 
   console.log("BookCard render:", {
     title: book.title,
@@ -14,7 +14,7 @@ export default function BookCard({ book, onDelete }) {
   });
 
   return (
-    <div className="book-card">
+    <div className="book-card" data-status={book.status}>
       <button
         className="delete-btn"
         onClick={() => {
@@ -36,6 +36,13 @@ export default function BookCard({ book, onDelete }) {
       )}
       <h3 dir="auto">{book.title}</h3>
       <p dir="auto">{book.author}</p>
+      <select className="status-select" value={book.status || "null"} onChange={handleStatusChange}>
+        <option value="null">Select Status</option>
+        <option value="tbr">TBR</option>
+        <option value="reading">Currently Reading</option>
+        <option value="read">Read</option>
+        <option value="dnf">DNF</option>
+      </select>
     </div>
   );
 }
