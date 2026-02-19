@@ -110,3 +110,19 @@ body {
   background-color: #f8d7da;
   color: #842029;
 }
+
+/* Style based on lend state */
+
+.lent img {
+  filter: grayscale(1);
+  opacity: 0.3;
+}
+
+.lent h3 {
+  color: #000000;
+  opacity: 0.5;
+}
+
+.book-card.lent {
+  background-color: #a3a3a35e;
+}

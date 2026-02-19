@@ -1,20 +1,42 @@
 import { useState } from "react";
+import lendLengthCalc from "../utils/lendLengthCalc.js";
 
-export default function BookCard({ book, onDelete, onStatusChange }) {
+export default function BookCard({
+  book,
+  onDelete,
+  onStatusChange,
+  onLendBook,
+  onReturnBook,
+}) {
   const [imageError, setImageError] = useState(false);
+  const [showLendForm, setShowLendForm] = useState(false);
+  const [lentTo, setLentTo] = useState("");
+
+  const lentPercent = book.isLent ? lendLengthCalc(book.lentDate) / 100 : 0;
 
   const handleStatusChange = (e) => {
     onStatusChange(book.id, e.target.value);
   };
 
-  console.log("BookCard render:", {
-    title: book.title,
-    coverUrl: book.coverUrl,
-    imageError,
-  });
+  // console.log("BookCard render:", {
+  //   title: book.title,
+  //   coverUrl: book.coverUrl,
+  //   imageError,
+  // });
+
+  const handleSubmitLend = (e) => {
+    e.preventDefault();
+    const today = new Date().toISOString().split("T")[0];
+    onLendBook(book.id, lentTo, today);
+    setShowLendForm(false);
+  };
 
   return (
-    <div className="book-card" data-status={book.status}>
+    <div
+      className={`book-card ${book.isLent ? "lent" : ""}`}
+      data-status={book.status}
+      style={{ boxShadow: `0 0 20px 0 rgba(255, 0, 0, ${lentPercent})` }}
+    >
       <button
         className="delete-btn"
         onClick={() => {
@@ -35,14 +57,45 @@ export default function BookCard({ book, onDelete, onStatusChange }) {
         <div>{book.title}</div>
       )}
       <h3 dir="auto">{book.title}</h3>
-      <p dir="auto">{book.author}</p>
-      <select className="status-select" value={book.status || "null"} onChange={handleStatusChange}>
+      {book.isLent ? (
+        <p dir="auto">
+          Lent to: {book.lentTo} on{" "}
+          {new Date(book.lentDate).toLocaleDateString("en-GB")}
+        </p>
+      ) : (
+        <p dir="auto">{book.author}</p>
+      )}
+      <select
+        className="status-select"
+        value={book.status || "null"}
+        onChange={handleStatusChange}
+      >
         <option value="null">Select Status</option>
         <option value="tbr">TBR</option>
         <option value="reading">Currently Reading</option>
         <option value="read">Read</option>
         <option value="dnf">DNF</option>
       </select>
+      {!book.isLent && !showLendForm && (
+        <button onClick={() => setShowLendForm(true)}>Lend Book</button>
+      )}
+      {!book.isLent && showLendForm && (
+        <form>
+          <label>Lend to:</label>
+          <input
+            type="text"
+            value={lentTo}
+            onChange={(e) => setLentTo(e.target.value)}
+            placeholder="Who is borrowing the book?"
+          />
+          <button type="submit" onClick={handleSubmitLend}>
+            Lend Book
+          </button>
+        </form>
+      )}
+      {book.isLent && (
+        <button onClick={() => onReturnBook(book.id)}>Return Book</button>
+      )}
     </div>
   );
 }

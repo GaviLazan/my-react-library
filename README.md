@@ -1,6 +1,6 @@
 # React Library Tracker
 
-A  personal library management app built with React, allowing you to track your book collection, reading status, lending history, and ratings.
+A personal library management app built with React, allowing you to track your book collection, reading status, lending history, and ratings.
 
 ## Tech Stack
 
@@ -12,6 +12,7 @@ A  personal library management app built with React, allowing you to track your 
 ## Features
 
 ### Core Features
+
 - Add books via ISBN (Open Library API)
 - Add books manually (title + author + cover URL)
 - Delete books with confirmation dialog
@@ -26,7 +27,9 @@ A  personal library management app built with React, allowing you to track your 
 - Edit book information
 
 ### Data Model
+
 Each book contains:
+
 - `id`, `title`, `author`, `coverUrl`, `isbn`
 - `status`: `null | 'tbr' | 'reading' | 'read' | 'dnf'`
 - `rating`: 0-5 (only for read/DNF books)
@@ -50,7 +53,7 @@ src/
 ├── utils/
 │   ├── storage.js          # localStorage utilities (getBooks, saveBooks, hasSeed)
 │   ├── seedLibrary.js      # Seed function (first-load migration)
-│   └── dateHelpers.js      # Date utilities for lending duration (*not complete*)
+│   └── lendLengthCalc.js   # Date utilities for lending duration
 ├── App.jsx                 # Main app component
 ├── main.jsx                # React entry point
 └── index.css               # Global styles
@@ -75,6 +78,7 @@ Visit `http://localhost:5173` in your browser.
 ## Development Timeline
 
 ### Sprint 0: Foundation
+
 - Vite + React project setup
 - localStorage utilities (getBooks, saveBooks, hasSeed)
 - Seed function (migrates existing library.json data with new fields: status, rating, isLent)
@@ -84,19 +88,22 @@ Visit `http://localhost:5173` in your browser.
 - RTL text support for Hebrew/Arabic titles and authors
 
 ### Sprint 1: Add, Delete, Status, Lending
+
 - Open Library API integration with author fallback logic
 - AddBookForm component (ISBN input + Enter key support)
 - ManualAddForm component (title + author + cover URL)
 - Delete with browser confirm() dialog
 - Status selector (null/TBR/reading/read/DNF)
-- Card visual indicators by status (colored borders)
-- Lending system (lend/return with borrower tracking)
-- Visual states (greyscale for lent books, red border for overdue)
-- Date utility functions for lending duration
+- Card visual indicators by status (colored cards)
+- Lending system (lend/return with borrower name and auto-generated date)
+- Gradual red glow on lent cards (starts at 4 weeks, maxes at 6 months)
+- Lent cards show borrower name and date instead of author
+- Dates stored as ISO format (yyyy-mm-dd), displayed as dd/mm/yyyy
 - Auto-save to localStorage on all changes
 - Long title truncation (2-line limit with ellipsis)
 
 ### Sprint 2: Filters, Search, Stats, Edit
+
 - Star rating component (visible only for read/DNF books)
 - Status filter bar
 - Real-time search
@@ -108,7 +115,9 @@ Visit `http://localhost:5173` in your browser.
 - Open Library attribution
 
 ### Sprint 3: MUI Polish & QA
+
 - Replace plain HTML with MUI components
+- Optional date picker for lend date (currently auto-generates today's date)
 - Visual polish (card elevation, glows, responsive layout)
 - MUI Tooltips on truncated titles
 - Cross-browser testing
@@ -125,20 +134,25 @@ Visit `http://localhost:5173` in your browser.
 ## API Integration
 
 ### Open Library API
+
 - **Primary use:** Fetch book metadata by ISBN
 - **Author fallback:** Checks both edition and work objects for author data (some books only have authors at the work level)
 - **Cover images:** Uses `http://covers.openlibrary.org/b/id/{coverId}-M.jpg` (note: http, not https)
 - **Attribution:** Open Library attribution displayed in footer
 
 ### BookCover API — Deferred to Post-Presentation
+
 The BookCover API (https://bookcover.longitood.com) was successfully implemented but is currently disabled due to CORS policy blocking browser requests. The API works correctly but requires a backend proxy to bypass CORS restrictions.
 
 **Status:** Code written and preserved for restoration when backend is added post-presentation.
 
 **Code to restore** (place in `openLibrary.js` cover section):
+
 ```javascript
 try {
-  const bookCoverResponse = await axios.get(`https://bookcover.longitood.com/bookcover/${isbn}`);
+  const bookCoverResponse = await axios.get(
+    `https://bookcover.longitood.com/bookcover/${isbn}`,
+  );
   coverUrl = bookCoverResponse.data.url;
 } catch {
   // BookCover failed, try Open Library
@@ -160,6 +174,7 @@ try {
 This project was built as part of the SheCodes bootcamp React module. The original assignment was a To-Do List app, but was adapted to rebuild an existing vanilla JavaScript library tracker in React.
 
 **Learning objectives:**
+
 - React fundamentals (components, state, props, hooks)
 - Data persistence with localStorage
 - API integration and error handling

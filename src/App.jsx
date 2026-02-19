@@ -5,12 +5,13 @@ import BookGrid from "./components/BookGrid";
 import AddBookForm from "./components/AddBookForm";
 import ManualAddForm from "./components/ManualAddForm";
 
-function App() {
+export default function App() {
   const [books, setBooks] = useState([]);
 
   useEffect(() => {
     seedLibrary();
     const bookList = getBooks();
+    // eslint-disable-next-line react-hooks/set-state-in-effect
     setBooks(bookList);
   }, []);
 
@@ -39,9 +40,30 @@ function App() {
 
   function handleStatusChange(bookId, newStatus) {
     const updatedBooks = books.map((book) =>
-    book.id === bookId ? { ...book, status: newStatus } : book);
+      book.id === bookId ? { ...book, status: newStatus } : book,
+    );
     setBooks(updatedBooks);
     saveBooks(updatedBooks);
+  }
+
+  function handleLendBook(bookId, lentTo, lentDate) {
+    const lendBook = books.map((book) =>
+      book.id === bookId
+        ? { ...book, isLent: true, lentTo: lentTo, lentDate: lentDate }
+        : book,
+    );
+    setBooks(lendBook);
+    saveBooks(lendBook);
+  }
+
+  function handleReturnBook(bookId) {
+    const returnBook = books.map((book) =>
+      book.id === bookId
+        ? { ...book, isLent: false, lentTo: "", lentDate: "" }
+        : book,
+    );
+    setBooks(returnBook);
+    saveBooks(returnBook);
   }
 
   return (
@@ -50,9 +72,13 @@ function App() {
       <AddBookForm onAddBook={handleAddBook} />
       <ManualAddForm onAddBook={handleAddBook} />
       <p>Total books: {books.length}</p>
-      <BookGrid books={books} onDelete={handleDelete} onStatusChange={handleStatusChange}/>
+      <BookGrid
+        books={books}
+        onDelete={handleDelete}
+        onStatusChange={handleStatusChange}
+        onLendBook={handleLendBook}
+        onReturnBook={handleReturnBook}
+      />
     </div>
   );
 }
-
-export default App;
