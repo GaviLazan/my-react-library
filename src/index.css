@@ -80,6 +80,10 @@ body {
   width: 20px;
 }
 
+.star-rating {
+  cursor: pointer;
+}
+
 .error-message {
   color: red;
   font-size: 12px;
@@ -88,6 +92,10 @@ body {
 
 .status-select {
   margin-top: 8px;
+}
+
+.active-filter {
+  background-color: #842029;
 }
 
 /* Style based on selected value */

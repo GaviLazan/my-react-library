@@ -4,9 +4,11 @@ import seedLibrary from "./utils/seedLibrary";
 import BookGrid from "./components/BookGrid";
 import AddBookForm from "./components/AddBookForm";
 import ManualAddForm from "./components/ManualAddForm";
+import FilterBar from "./components/FilterBar";
 
 export default function App() {
   const [books, setBooks] = useState([]);
+  const [activeFilter, setActiveFilter] = useState("all");
 
   useEffect(() => {
     seedLibrary();
@@ -39,6 +41,7 @@ export default function App() {
   }
 
   function handleStatusChange(bookId, newStatus) {
+    newStatus = newStatus==="null"? null : newStatus;
     const updatedBooks = books.map((book) =>
       book.id === bookId ? { ...book, status: newStatus } : book,
     );
@@ -66,18 +69,38 @@ export default function App() {
     saveBooks(returnBook);
   }
 
+  function handleRatingChange(bookId, rating) {
+    const updatedRating = books.map((book) =>
+      book.id === bookId ? { ...book, rating: rating } : book,
+    );
+    setBooks(updatedRating);
+    saveBooks(updatedRating);
+  }
+
+  function handleFilterChange(filter) {
+    setActiveFilter(filter);
+  }
+
+  const filteredBooks = activeFilter === "all"
+  ? books
+  : activeFilter === "untagged"
+  ? books.filter((book) => book.status === null)
+  : books.filter((book) => book.status === activeFilter);
+
   return (
     <div>
       <h1>My Library</h1>
       <AddBookForm onAddBook={handleAddBook} />
       <ManualAddForm onAddBook={handleAddBook} />
+      <FilterBar activeFilter={activeFilter} handleFilterChange={handleFilterChange}/>
       <p>Total books: {books.length}</p>
       <BookGrid
-        books={books}
+        books={filteredBooks}
         onDelete={handleDelete}
         onStatusChange={handleStatusChange}
         onLendBook={handleLendBook}
         onReturnBook={handleReturnBook}
+        onRatingChange={handleRatingChange}
       />
     </div>
   );

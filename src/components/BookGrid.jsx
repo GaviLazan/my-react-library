@@ -6,6 +6,7 @@ export default function BookGrid({
   onStatusChange,
   onLendBook,
   onReturnBook,
+  onRatingChange
 }) {
   return (
     <div className="book-grid">
@@ -17,6 +18,7 @@ export default function BookGrid({
           onStatusChange={onStatusChange}
           onLendBook={onLendBook}
           onReturnBook={onReturnBook}
+          onRatingChange={onRatingChange}
         />
       ))}
     </div>

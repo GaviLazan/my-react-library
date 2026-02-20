@@ -165,9 +165,9 @@
     "author": "James Islington",
     "coverUrl": "https://covers.openlibrary.org/b/id/9245635-M.jpg",
     "isbn": "9780316274074",
-    "isLent": false,
-    "lentTo": "",
-    "lentDate": null
+    "isLent": true,
+    "lentTo": "Manoli",
+    "lentDate": "2025-01-10"
   },
   {
     "id": 1771537976630,
@@ -185,8 +185,8 @@
     "author": "James Islington",
     "coverUrl": "https://covers.openlibrary.org/b/id/9248546-M.jpg",
     "isbn": "",
-    "isLent": true,
-    "lentTo": "Bob",
-    "lentDate": "2025-01-10"
+    "isLent": false,
+    "lentTo": "",
+    "lentDate": null
   }
 ]

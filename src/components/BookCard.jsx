@@ -7,6 +7,7 @@ export default function BookCard({
   onStatusChange,
   onLendBook,
   onReturnBook,
+  onRatingChange,
 }) {
   const [imageError, setImageError] = useState(false);
   const [showLendForm, setShowLendForm] = useState(false);
@@ -65,6 +66,13 @@ export default function BookCard({
       ) : (
         <p dir="auto">{book.author}</p>
       )}
+      <span>
+        {[1, 2, 3, 4, 5].map((star) => (
+          <span className="star-rating" key={star} onClick={() => onRatingChange(book.id, star)}>
+            {star <= book.rating ? "★" : "☆"}
+          </span>
+        ))}
+      </span>
       <select
         className="status-select"
         value={book.status || "null"}
