@@ -1,17 +1,17 @@
-import seedData from '../data/seedData.json';
-import { hasSeed, saveBooks } from './storage';
+import seedData from "../data/seedData.json";
+import { hasSeed, saveBooks } from "./storage";
 
 export default function seedLibrary() {
   if (hasSeed()) {
     return;
   }
-const importedBooks = seedData.map(book => ({
+  const importedBooks = seedData.map((book) => ({
     ...book,
     status: null,
-    rating: 0
-}));
+    rating: 0,
+  }));
 
-saveBooks(importedBooks);
+  saveBooks(importedBooks);
 
-localStorage.setItem("librarySeeded", "true");
+  localStorage.setItem("librarySeeded", "true");
 }

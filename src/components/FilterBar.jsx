@@ -1,4 +1,9 @@
-export default function FilterBar({ activeFilter, handleFilterChange }) {
+export default function FilterBar({
+  activeFilter,
+  handleFilterChange,
+  lentFilter,
+  setLentFilter,
+}) {
   return (
     <>
       <button
@@ -37,6 +42,12 @@ export default function FilterBar({ activeFilter, handleFilterChange }) {
       >
         DNF
       </button>
+      <label> Hide Lent Books: </label>
+      <input
+        type="checkbox"
+        onChange={() => setLentFilter(lentFilter ? false : true)}
+        checked={lentFilter}
+      />
     </>
   );
 }

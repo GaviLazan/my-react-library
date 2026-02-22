@@ -68,7 +68,11 @@ export default function BookCard({
       )}
       <span>
         {[1, 2, 3, 4, 5].map((star) => (
-          <span className="star-rating" key={star} onClick={() => onRatingChange(book.id, star)}>
+          <span
+            className="star-rating"
+            key={star}
+            onClick={() => onRatingChange(book.id, star)}
+          >
             {star <= book.rating ? "★" : "☆"}
           </span>
         ))}
@@ -78,7 +82,7 @@ export default function BookCard({
         value={book.status || "null"}
         onChange={handleStatusChange}
       >
-        <option value="null">Select Status</option>
+        <option value="null">No Status</option>
         <option value="tbr">TBR</option>
         <option value="reading">Currently Reading</option>
         <option value="read">Read</option>

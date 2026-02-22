@@ -5,10 +5,15 @@ import BookGrid from "./components/BookGrid";
 import AddBookForm from "./components/AddBookForm";
 import ManualAddForm from "./components/ManualAddForm";
 import FilterBar from "./components/FilterBar";
+import SortBar from "./components/SortBar";
 
 export default function App() {
   const [books, setBooks] = useState([]);
   const [activeFilter, setActiveFilter] = useState("all");
+  const [lentFilter, setLentFilter] = useState(false);
+  const [activeSort, setActiveSort] = useState("title");
+  const [sortAscending, setSortAscending] = useState(false);
+  const [searchTerm, setSearchTerm] = useState("");
 
   useEffect(() => {
     seedLibrary();
@@ -41,7 +46,7 @@ export default function App() {
   }
 
   function handleStatusChange(bookId, newStatus) {
-    newStatus = newStatus==="null"? null : newStatus;
+    newStatus = newStatus === "null" ? null : newStatus;
     const updatedBooks = books.map((book) =>
       book.id === bookId ? { ...book, status: newStatus } : book,
     );
@@ -81,27 +86,108 @@ export default function App() {
     setActiveFilter(filter);
   }
 
-  const filteredBooks = activeFilter === "all"
-  ? books
-  : activeFilter === "untagged"
-  ? books.filter((book) => book.status === null)
-  : books.filter((book) => book.status === activeFilter);
+  const filteredBooks =
+    activeFilter === "all"
+      ? books
+      : activeFilter === "untagged"
+        ? books.filter((book) => book.status === null)
+        : books.filter((book) => book.status === activeFilter);
+
+  const hideLentBooks =
+    lentFilter === false
+      ? filteredBooks
+      : filteredBooks.filter((book) => book.isLent !== lentFilter);
+
+  function handleSortChange(newSort) {
+    setActiveSort(newSort);
+    setSortAscending(false);
+  }
+
+  const searchedBooks =
+    searchTerm === ""
+      ? hideLentBooks
+      : hideLentBooks.filter(
+          (book) =>
+            book.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
+            book.author.toLowerCase().includes(searchTerm.toLowerCase()),
+        );
+
+  const sortedBooks = [...searchedBooks].sort((a, b) => {
+    if (activeSort === "title") {
+      if (!sortAscending) {
+        return a.title.localeCompare(b.title);
+      } else {
+        return b.title.localeCompare(a.title);
+      }
+    } else if (activeSort === "author") {
+      if (!sortAscending) {
+        return a.author.localeCompare(b.author);
+      } else {
+        return b.author.localeCompare(a.author);
+      }
+    } else if (activeSort === "rating") {
+      if (!sortAscending) {
+        return b.rating - a.rating;
+      } else {
+        return a.rating - b.rating;
+      }
+    } else if (activeSort === "date") {
+      if (!sortAscending) {
+        return String(a.dateAdded || "").localeCompare(
+          String(b.dateAdded || ""),
+        );
+      } else {
+        return String(b.dateAdded || "").localeCompare(
+          String(a.dateAdded || ""),
+        );
+      }
+    }
+  });
 
   return (
     <div>
       <h1>My Library</h1>
       <AddBookForm onAddBook={handleAddBook} />
       <ManualAddForm onAddBook={handleAddBook} />
-      <FilterBar activeFilter={activeFilter} handleFilterChange={handleFilterChange}/>
-      <p>Total books: {books.length}</p>
-      <BookGrid
-        books={filteredBooks}
-        onDelete={handleDelete}
-        onStatusChange={handleStatusChange}
-        onLendBook={handleLendBook}
-        onReturnBook={handleReturnBook}
-        onRatingChange={handleRatingChange}
+      <FilterBar
+        activeFilter={activeFilter}
+        handleFilterChange={handleFilterChange}
+        lentFilter={lentFilter}
+        setLentFilter={setLentFilter}
       />
+      <br />
+      <SortBar
+        activeSort={activeSort}
+        handleSortChange={handleSortChange}
+        sortAscending={sortAscending}
+        setSortAscending={setSortAscending}
+      />
+      <br />
+      <input
+        type="text"
+        value={searchTerm}
+        onChange={(e) => {
+          setSearchTerm(e.target.value);
+          setSortAscending(false);
+        }}
+      />
+      <p>Total books: {books.length}</p>
+      {searchTerm !== "" && sortedBooks.length === 0 && (
+        <p>No books matching {searchTerm}</p>
+      )}
+      {activeFilter !== "all" && sortedBooks.length === 0 && (
+        <p>No books in {activeFilter}</p>
+      )}
+      {sortedBooks.length > 0 && (
+        <BookGrid
+          books={sortedBooks}
+          onDelete={handleDelete}
+          onStatusChange={handleStatusChange}
+          onLendBook={handleLendBook}
+          onReturnBook={handleReturnBook}
+          onRatingChange={handleRatingChange}
+        />
+      )}
     </div>
   );
 }
