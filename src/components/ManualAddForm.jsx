@@ -4,31 +4,40 @@ export default function ManualAddForm({ onAddBook }) {
   const [title, setTitle] = useState("");
   const [author, setAuthor] = useState("");
   const [coverUrl, setCoverUrl] = useState("");
+  const [errorMessage, setErrorMessage] = useState("");
 
   const handleSubmit = (event) => {
     event.preventDefault();
     if (!title.trim() && !author.trim()) {
-      alert("Please enter title and author name.");
+      setErrorMessage("Please enter title and author name.");
       return;
     } else if (!author.trim()) {
-      alert("Please enter author name.");
+      setErrorMessage("Please enter author name.");
       return;
     } else if (!title.trim()) {
-      alert("Please enter title.");
+      setErrorMessage("Please enter title.");
       return;
     } else if (coverUrl) {
-      const validExtensions = ["jpg", "jpeg", "png", "webp", "gif"];
-      const extension = coverUrl.split(".").pop().toLowerCase();
-      if (!validExtensions.includes(extension)) {
-        alert("Please paste valid image link.");
-        return;
-      }
+      const img = new Image();
+      img.onload = () => {
+        onAddBook({ title, author, coverUrl, isbn: "" });
+        setTitle("");
+        setAuthor("");
+        setCoverUrl("");
+        setErrorMessage("")
+      };
+      img.onerror = () => {
+        setErrorMessage("Please paste valid image link.");
+      };
+      img.src = coverUrl;
+      return;
     }
     const bookData = { title, author, coverUrl, isbn: "" };
     onAddBook(bookData);
     setTitle("");
     setAuthor("");
     setCoverUrl("");
+    setErrorMessage("")
   };
 
   return (
@@ -52,6 +61,7 @@ export default function ManualAddForm({ onAddBook }) {
         onChange={(e) => setCoverUrl(e.target.value)}
       />
       <button type="submit">Add Book</button>
+      {errorMessage && <p className="error-message">{errorMessage}</p>}
     </form>
   );
 }

@@ -12,6 +12,7 @@ export default function BookCard({
   const [imageError, setImageError] = useState(false);
   const [showLendForm, setShowLendForm] = useState(false);
   const [lentTo, setLentTo] = useState("");
+  const [lendError, setLendError] = useState("")
 
   const lentPercent = book.isLent ? lendLengthCalc(book.lentDate) / 100 : 0;
 
@@ -27,6 +28,10 @@ export default function BookCard({
 
   const handleSubmitLend = (e) => {
     e.preventDefault();
+    if (lentTo === "") {
+      setLendError("Please enter a borrower name");
+      return;
+    }
     const today = new Date().toISOString().split("T")[0];
     onLendBook(book.id, lentTo, today);
     setShowLendForm(false);
@@ -103,6 +108,7 @@ export default function BookCard({
           <button type="submit" onClick={handleSubmitLend}>
             Lend Book
           </button>
+          {lendError && <p className="error-message">{lendError}</p>}
         </form>
       )}
       {book.isLent && (

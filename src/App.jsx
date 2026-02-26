@@ -6,6 +6,7 @@ import AddBookForm from "./components/AddBookForm";
 import ManualAddForm from "./components/ManualAddForm";
 import FilterBar from "./components/FilterBar";
 import SortBar from "./components/SortBar";
+import LentStatusPanel from "./components/LentStatusPanel";
 
 export default function App() {
   const [books, setBooks] = useState([]);
@@ -188,6 +189,7 @@ export default function App() {
           onRatingChange={handleRatingChange}
         />
       )}
+      <LentStatusPanel books={books}/>
     </div>
   );
 }
