@@ -1,9 +1,14 @@
 import { useState } from "react";
 
-export default function ManualAddForm({ onAddBook }) {
-  const [title, setTitle] = useState("");
-  const [author, setAuthor] = useState("");
-  const [coverUrl, setCoverUrl] = useState("");
+export default function BookFormModal({
+  onAddBook,
+  onEditBook,
+  bookFormState,
+  setBookFormState,
+}) {
+  const [title, setTitle] = useState(bookFormState?.title || "");
+  const [author, setAuthor] = useState(bookFormState?.author || "");
+  const [coverUrl, setCoverUrl] = useState(bookFormState?.coverUrl || "");
   const [errorMessage, setErrorMessage] = useState("");
 
   const handleSubmit = (event) => {
@@ -24,7 +29,7 @@ export default function ManualAddForm({ onAddBook }) {
         setTitle("");
         setAuthor("");
         setCoverUrl("");
-        setErrorMessage("")
+        setErrorMessage("");
       };
       img.onerror = () => {
         setErrorMessage("Please paste valid image link.");
@@ -37,7 +42,7 @@ export default function ManualAddForm({ onAddBook }) {
     setTitle("");
     setAuthor("");
     setCoverUrl("");
-    setErrorMessage("")
+    setErrorMessage("");
   };
 
   return (

@@ -3,10 +3,11 @@ import { getBooks, saveBooks } from "./utils/storage";
 import seedLibrary from "./utils/seedLibrary";
 import BookGrid from "./components/BookGrid";
 import AddBookForm from "./components/AddBookForm";
-import ManualAddForm from "./components/ManualAddForm";
+import BookFormModal from "./components/BookFormModal ";
 import FilterBar from "./components/FilterBar";
 import SortBar from "./components/SortBar";
 import LentStatusPanel from "./components/LentStatusPanel";
+import LibraryStatsBar from "./components/LibraryStatsBar";
 
 export default function App() {
   const [books, setBooks] = useState([]);
@@ -15,6 +16,8 @@ export default function App() {
   const [activeSort, setActiveSort] = useState("title");
   const [sortAscending, setSortAscending] = useState(false);
   const [searchTerm, setSearchTerm] = useState("");
+  const [bookFormState, setBookFormState] = useState(null)
+  
 
   useEffect(() => {
     seedLibrary();
@@ -42,6 +45,14 @@ export default function App() {
 
   function handleDelete(bookId) {
     const updatedBooks = books.filter((book) => book.id !== bookId);
+    setBooks(updatedBooks);
+    saveBooks(updatedBooks);
+  }
+
+  function handleEditBook(bookId, updatedData) {
+    const updatedBooks = books.map((book) =>
+      book.id === bookId ? { ...book, ...updatedData } : book,
+    );
     setBooks(updatedBooks);
     saveBooks(updatedBooks);
   }
@@ -149,7 +160,12 @@ export default function App() {
     <div>
       <h1>My Library</h1>
       <AddBookForm onAddBook={handleAddBook} />
-      <ManualAddForm onAddBook={handleAddBook} />
+      <BookFormModal
+        onAddBook={handleAddBook}
+        onEditBook={handleEditBook}
+        bookFormState={bookFormState}
+        setBookFormState={setBookFormState}
+      />
       <FilterBar
         activeFilter={activeFilter}
         handleFilterChange={handleFilterChange}
@@ -166,13 +182,13 @@ export default function App() {
       <br />
       <input
         type="text"
+        placeholder="Search"
         value={searchTerm}
         onChange={(e) => {
           setSearchTerm(e.target.value);
           setSortAscending(false);
         }}
       />
-      <p>Total books: {books.length}</p>
       {searchTerm !== "" && sortedBooks.length === 0 && (
         <p>No books matching {searchTerm}</p>
       )}
@@ -189,7 +205,18 @@ export default function App() {
           onRatingChange={handleRatingChange}
         />
       )}
-      <LentStatusPanel books={books}/>
+      <LentStatusPanel books={books} />
+      <LibraryStatsBar books={books} />
+      <footer>
+        Book data provided by{" "}
+        <a href="https://openlibrary.org" target="_blank">
+          Open Library{" "}
+        </a>{" "}
+        <br /> favicon by{" "}
+        <a href="https://thenounproject.com/creator/samanbb/" target="_blank">
+          Saman Bemel-Benrud from Noun Project{" "}
+        </a>{" "}
+      </footer>
     </div>
   );
 }
