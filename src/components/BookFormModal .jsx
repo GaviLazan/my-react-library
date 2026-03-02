@@ -10,6 +10,8 @@ export default function BookFormModal({
   const [author, setAuthor] = useState(bookFormState?.author || "");
   const [coverUrl, setCoverUrl] = useState(bookFormState?.coverUrl || "");
   const [errorMessage, setErrorMessage] = useState("");
+  const [lentTo, setLentTo] = useState(bookFormState?.lentTo || "");
+  const [lentDate, setLentDate] = useState(bookFormState?.lentDate || "");
 
   const handleSubmit = (event) => {
     event.preventDefault();
@@ -25,11 +27,17 @@ export default function BookFormModal({
     } else if (coverUrl) {
       const img = new Image();
       img.onload = () => {
-        onAddBook({ title, author, coverUrl, isbn: "" });
-        setTitle("");
-        setAuthor("");
-        setCoverUrl("");
-        setErrorMessage("");
+        if (bookFormState === "add") {
+          onAddBook({ title, author, coverUrl, isbn: "" });
+          setTitle("");
+          setAuthor("");
+          setCoverUrl("");
+          setErrorMessage("");
+        } else {
+          const updatedData = { title, author, coverUrl, lentTo, lentDate };
+          onEditBook(bookFormState.id, updatedData);
+          setBookFormState(null);
+        }
       };
       img.onerror = () => {
         setErrorMessage("Please paste valid image link.");
@@ -37,12 +45,18 @@ export default function BookFormModal({
       img.src = coverUrl;
       return;
     }
-    const bookData = { title, author, coverUrl, isbn: "" };
-    onAddBook(bookData);
-    setTitle("");
-    setAuthor("");
-    setCoverUrl("");
-    setErrorMessage("");
+    if (bookFormState === "add") {
+      const bookData = { title, author, coverUrl, isbn: "" };
+      onAddBook(bookData);
+      setTitle("");
+      setAuthor("");
+      setCoverUrl("");
+      setErrorMessage("");
+    } else {
+      const updatedData = { title, author, coverUrl, lentTo, lentDate };
+      onEditBook(bookFormState.id, updatedData);
+      setBookFormState(null);
+    }
   };
 
   return (
@@ -65,7 +79,21 @@ export default function BookFormModal({
         value={coverUrl}
         onChange={(e) => setCoverUrl(e.target.value)}
       />
-      <button type="submit">Add Book</button>
+      {bookFormState?.isLent === true && (
+        <div>
+          <label>Lent to:</label>
+          <input value={lentTo} onChange={(e) => setLentTo(e.target.value)} />
+          <label>Lent on:</label>
+          <input
+            value={lentDate}
+            onChange={(e) => setLentDate(e.target.value)}
+          />
+        </div>
+      )}
+      <button type="submit">
+        {bookFormState !== "add" ? "Save Changes" : "Add Book"}
+      </button>
+      <button onClick={()=>setBookFormState(null)}>Cancel</button>
       {errorMessage && <p className="error-message">{errorMessage}</p>}
     </form>
   );

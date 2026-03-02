@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useRef, useEffect } from "react";
 import lendLengthCalc from "../utils/lendLengthCalc.js";
 
 export default function BookCard({
@@ -8,11 +8,13 @@ export default function BookCard({
   onLendBook,
   onReturnBook,
   onRatingChange,
+  setBookFormState,
 }) {
   const [imageError, setImageError] = useState(false);
   const [showLendForm, setShowLendForm] = useState(false);
   const [lentTo, setLentTo] = useState("");
-  const [lendError, setLendError] = useState("")
+  const [lendError, setLendError] = useState("");
+  const inputRef = useRef(null);
 
   const lentPercent = book.isLent ? lendLengthCalc(book.lentDate) / 100 : 0;
 
@@ -37,6 +39,12 @@ export default function BookCard({
     setShowLendForm(false);
   };
 
+  useEffect(() => {
+    if (showLendForm) {
+      inputRef.current.focus();
+    }
+  }, [showLendForm]);
+
   return (
     <div
       className={`book-card ${book.isLent ? "lent" : ""}`}
@@ -53,6 +61,7 @@ export default function BookCard({
       >
         x
       </button>
+      <button onClick={() => setBookFormState(book)}>Edit</button>
       {book.coverUrl && !imageError ? (
         <img
           src={book.coverUrl}
@@ -101,12 +110,22 @@ export default function BookCard({
           <label>Lend to:</label>
           <input
             type="text"
+            ref={inputRef}
             value={lentTo}
             onChange={(e) => setLentTo(e.target.value)}
             placeholder="Who is borrowing the book?"
           />
           <button type="submit" onClick={handleSubmitLend}>
             Lend Book
+          </button>
+          <button
+            onClick={() => {
+              setShowLendForm(false);
+              setLentTo("");
+              setLendError("");
+            }}
+          >
+            Cancel
           </button>
           {lendError && <p className="error-message">{lendError}</p>}
         </form>

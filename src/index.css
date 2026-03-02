@@ -150,3 +150,13 @@ footer {
     text-align: center;
     border-top: 1px solid #ccc;
     font-size: 12px;
+}
+
+footer a {
+    color: #0066cc;
+    text-decoration: none;
+}
+
+footer a:hover {
+    text-decoration: underline;
+}

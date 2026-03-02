@@ -16,8 +16,7 @@ export default function App() {
   const [activeSort, setActiveSort] = useState("title");
   const [sortAscending, setSortAscending] = useState(false);
   const [searchTerm, setSearchTerm] = useState("");
-  const [bookFormState, setBookFormState] = useState(null)
-  
+  const [bookFormState, setBookFormState] = useState(null);
 
   useEffect(() => {
     seedLibrary();
@@ -159,13 +158,21 @@ export default function App() {
   return (
     <div>
       <h1>My Library</h1>
-      <AddBookForm onAddBook={handleAddBook} />
-      <BookFormModal
+      <AddBookForm
         onAddBook={handleAddBook}
         onEditBook={handleEditBook}
         bookFormState={bookFormState}
         setBookFormState={setBookFormState}
       />
+      <button onClick={() => setBookFormState("add")}>Add Book Manually</button>
+      {bookFormState && (
+        <BookFormModal
+          onAddBook={handleAddBook}
+          onEditBook={handleEditBook}
+          bookFormState={bookFormState}
+          setBookFormState={setBookFormState}
+        />
+      )}
       <FilterBar
         activeFilter={activeFilter}
         handleFilterChange={handleFilterChange}
@@ -203,6 +210,7 @@ export default function App() {
           onLendBook={handleLendBook}
           onReturnBook={handleReturnBook}
           onRatingChange={handleRatingChange}
+          setBookFormState={setBookFormState}
         />
       )}
       <LentStatusPanel books={books} />
