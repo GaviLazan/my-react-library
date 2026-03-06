@@ -7,7 +7,7 @@ export default function BookGrid({
   onLendBook,
   onReturnBook,
   onRatingChange,
-  setBookFormState
+  setBookFormState,
 }) {
   return (
     <div className="book-grid">

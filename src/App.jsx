@@ -42,6 +42,7 @@ export default function App() {
     const updatedBooks = [...books, newBook];
     setBooks(updatedBooks);
     saveBooks(updatedBooks);
+    setBookFormState(null);
   }
 
   function handleDelete(bookId) {
@@ -56,6 +57,7 @@ export default function App() {
     );
     setBooks(updatedBooks);
     saveBooks(updatedBooks);
+    setBookFormState(null);
   }
 
   function handleStatusChange(bookId, newStatus) {
@@ -176,7 +178,8 @@ export default function App() {
           bookFormState={bookFormState}
           setBookFormState={setBookFormState}
         />
-      )}
+      )}{" "}
+      <br />
       <FilterBar
         activeFilter={activeFilter}
         handleFilterChange={handleFilterChange}
@@ -194,7 +197,6 @@ export default function App() {
       <TextField
         label="Search"
         type="text"
-        variant="filled"
         value={searchTerm}
         onChange={(e) => {
           setSearchTerm(e.target.value);

@@ -28,13 +28,6 @@ body {
   flex-direction: column;
 }
 
-.book-card img {
-  width: 130px;
-  height: 200px;
-  object-fit: fill;
-  border-radius: 4px;
-}
-
 .book-card .cover-placeholder {
   width: 130px;
   height: 200px;
@@ -71,19 +64,6 @@ body {
   margin-top: auto;
 }
 
-.delete-btn {
-  position: absolute;
-  top: 8px;
-  right: 8px;
-  border-radius: 50%;
-  height: 20px;
-  width: 20px;
-  cursor: pointer;
-}
-
-.star-rating {
-  cursor: pointer;
-}
 .status-select {
   margin-top: 8px;
 }

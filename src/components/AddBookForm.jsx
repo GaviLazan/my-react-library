@@ -35,7 +35,6 @@ export default function AddBookForm({ onAddBook }) {
     <form onSubmit={handleSubmit}>
       <TextField
         label="Enter ISBN"
-        variant="filled"
         value={isbn}
         inputRef={inputRef}
         onChange={(e) => {

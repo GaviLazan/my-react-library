@@ -1,4 +1,4 @@
-import { useState, useRef, useEffect } from "react";
+import { useState, useRef, useEffect, forwardRef } from "react";
 import lendLengthCalc from "../utils/lendLengthCalc.js";
 import Button from "@mui/material/Button";
 import IconButton from "@mui/material/IconButton";
@@ -10,8 +10,20 @@ import Alert from "@mui/material/Alert";
 import Dialog from "@mui/material/Dialog";
 import DialogActions from "@mui/material/DialogActions";
 import DialogContent from "@mui/material/DialogContent";
+import DialogTitle from "@mui/material/DialogTitle";
 import DialogContentText from "@mui/material/DialogContentText";
 import Rating from "@mui/material/Rating";
+import Card from "@mui/material/Card";
+import CardMedia from "@mui/material/CardMedia";
+import CardContent from "@mui/material/CardContent";
+import Slide from "@mui/material/Slide";
+import { DatePicker } from "@mui/x-date-pickers/DatePicker";
+import dayjs from "dayjs";
+import Tooltip from "@mui/material/Tooltip";
+
+const Transition = forwardRef(function Transition(props, ref) {
+  return <Slide direction="up" ref={ref} {...props} />;
+});
 
 export default function BookCard({
   book,
@@ -28,6 +40,7 @@ export default function BookCard({
   const [lendError, setLendError] = useState("");
   const inputRef = useRef(null);
   const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
+  const [lentDate, setLentDate] = useState(dayjs().toISOString().split("T")[0]);
 
   const lentPercent = book.isLent ? lendLengthCalc(book.lentDate) / 100 : 0;
 
@@ -35,31 +48,24 @@ export default function BookCard({
     onStatusChange(book.id, e.target.value);
   };
 
-  // console.log("BookCard render:", {
-  //   title: book.title,
-  //   coverUrl: book.coverUrl,
-  //   imageError,
-  // });
-
   const handleSubmitLend = (e) => {
     e.preventDefault();
     if (lentTo === "") {
       setLendError("Please enter a borrower name");
       return;
     }
-    const today = new Date().toISOString().split("T")[0];
-    onLendBook(book.id, lentTo, today);
+    onLendBook(book.id, lentTo, lentDate);
     setShowLendForm(false);
   };
 
   useEffect(() => {
-    if (showLendForm) {
+    if (showLendForm && inputRef.current) {
       inputRef.current.focus();
     }
   }, [showLendForm]);
 
   return (
-    <div
+    <Card
       className={`book-card ${book.isLent ? "lent" : ""}`}
       data-status={book.status}
       style={{ boxShadow: `0 0 20px 0 rgba(255, 0, 0, ${lentPercent})` }}
@@ -89,79 +95,114 @@ export default function BookCard({
         Edit
       </Button>
       {book.coverUrl && !imageError ? (
-        <img
-          src={book.coverUrl}
+        <CardMedia
+          component="img"
+          image={book.coverUrl}
           alt={book.title}
           onError={() => setImageError(true)}
         />
       ) : (
         <div className="cover-placeholder">{book.title}</div>
       )}
-      <h3 dir="auto">{book.title}</h3>
-      {book.isLent ? (
-        <p dir="auto">
-          Lent to: {book.lentTo} on{" "}
-          {new Date(book.lentDate).toLocaleDateString("en-GB")}
-        </p>
-      ) : (
-        <p dir="auto">{book.author}</p>
-      )}
-      <Rating
-        value={book.rating}
-        onChange={(e, newValue) => onRatingChange(book.id, newValue)}
-      />
-      <Select
-        className="status-select"
-        value={book.status || "null"}
-        onChange={handleStatusChange}
-      >
-        <MenuItem value="null">No Status</MenuItem>
-        <MenuItem value="tbr">TBR</MenuItem>
-        <MenuItem value="reading">Currently Reading</MenuItem>
-        <MenuItem value="read">Read</MenuItem>
-        <MenuItem value="dnf">DNF</MenuItem>
-      </Select>
-      {!book.isLent && !showLendForm && (
-        <Button variant="contained" onClick={() => setShowLendForm(true)}>
-          Lend Book
-        </Button>
-      )}
-      {!book.isLent && showLendForm && (
-        <form onSubmit={handleSubmitLend}>
-          <TextField
-            label="Lend to:"
-            variant="filled"
-            type="text"
-            inputRef={inputRef}
-            value={lentTo}
-            onChange={(e) => setLentTo(e.target.value)}
-            placeholder="Who is borrowing the book?"
-          />
-          {lendError && <Alert severity="warning">{lendError}</Alert>}
-          <Button variant="contained" color="success" type="submit">
-            Save
+      <CardContent>
+        <Tooltip title={book.title}>
+          <h3 dir="auto">{book.title}</h3>
+        </Tooltip>
+        {book.isLent ? (
+          <Tooltip
+            title={`Lent to ${book.lentTo} on ${new Date(book.lentDate).toLocaleDateString("en-GB")}`}
+          >
+            <p dir="auto">
+              Lent to: {book.lentTo} on{" "}
+              {new Date(book.lentDate).toLocaleDateString("en-GB")}
+            </p>
+          </Tooltip>
+        ) : (
+          <Tooltip title={book.author}>
+            <p dir="auto">{book.author}</p>
+          </Tooltip>
+        )}
+        <Rating
+          value={book.rating}
+          onChange={(e, newValue) => onRatingChange(book.id, newValue)}
+        />
+        <Select
+          className="status-select"
+          value={book.status || "null"}
+          onChange={handleStatusChange}
+        >
+          <MenuItem value="null">No Status</MenuItem>
+          <MenuItem value="tbr">TBR</MenuItem>
+          <MenuItem value="reading">Currently Reading</MenuItem>
+          <MenuItem value="read">Read</MenuItem>
+          <MenuItem value="dnf">DNF</MenuItem>
+        </Select>
+        {!book.isLent && !showLendForm && (
+          <Button variant="contained" onClick={() => setShowLendForm(true)}>
+            Lend Book
           </Button>
+        )}
+        {!book.isLent && (
+          <Dialog open={showLendForm} slots={{ transition: Transition }}>
+            <DialogTitle>Lend a book</DialogTitle>
+            <DialogContent>
+              <form id="lend-form" onSubmit={handleSubmitLend}>
+                <TextField
+                  label="Lend to:"
+                  type="text"
+                  inputRef={inputRef}
+                  value={lentTo}
+                  onChange={(e) => setLentTo(e.target.value)}
+                  placeholder="Who is borrowing the book?"
+                />
+                <DatePicker
+                  label="Lent on"
+                  value={lentDate ? dayjs(lentDate) : dayjs()}
+                  onChange={(newValue) =>
+                    setLentDate(newValue.format("YYYY-MM-DD"))
+                  }
+                />
+                {lendError && <Alert severity="warning">{lendError}</Alert>}
+              </form>
+            </DialogContent>
+            <DialogActions>
+              {" "}
+              <Button
+                form="lend-form"
+                variant="contained"
+                color="success"
+                type="submit"
+              >
+                Save
+              </Button>
+              <Button
+                variant="contained"
+                onClick={() => {
+                  setShowLendForm(false);
+                  setLentTo("");
+                  setLendError("");
+                  setLentDate(dayjs().toISOString().split("T")[0]);
+                }}
+              >
+                Cancel
+              </Button>
+            </DialogActions>
+          </Dialog>
+        )}
+        {book.isLent && (
           <Button
             variant="contained"
+            color="info"
             onClick={() => {
-              setShowLendForm(false);
+              onReturnBook(book.id);
+              setLentDate(dayjs().toISOString().split("T")[0]);
               setLentTo("");
-              setLendError("");
             }}
           >
-            Cancel
+            Return Book
           </Button>
-        </form>
-      )}
-      {book.isLent && (
-        <Button
-          variant="contained"
-          color="info"
-          onClick={() => onReturnBook(book.id)}
-        >
-          Return Book
-        </Button>
-      )}
-    </div>
+        )}
+      </CardContent>
+    </Card>
   );
 }

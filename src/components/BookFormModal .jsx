@@ -1,7 +1,18 @@
-import { useState, useRef, useEffect } from "react";
+import { useState, useRef, useEffect, forwardRef } from "react";
 import Button from "@mui/material/Button";
 import TextField from "@mui/material/TextField";
 import Alert from "@mui/material/Alert";
+import Dialog from "@mui/material/Dialog";
+import DialogActions from "@mui/material/DialogActions";
+import DialogContent from "@mui/material/DialogContent";
+import DialogTitle from "@mui/material/DialogTitle";
+import Slide from "@mui/material/Slide";
+import { DatePicker } from "@mui/x-date-pickers/DatePicker";
+import dayjs from "dayjs";
+
+const Transition = forwardRef(function Transition(props, ref) {
+  return <Slide direction="up" ref={ref} {...props} />;
+});
 
 export default function BookFormModal({
   onAddBook,
@@ -64,53 +75,66 @@ export default function BookFormModal({
   };
 
   useEffect(() => {
-    inputRef.current.focus();
+    if (inputRef.current) {
+      inputRef.current.focus();
+    }
   }, []);
 
   return (
-    <form onSubmit={handleSubmit}>
-      <TextField
-        label="Title"
-        variant="filled"
-        value={title}
-        ref={inputRef}
-        onChange={(e) => setTitle(e.target.value)}
-      />
-      <TextField
-        variant="filled"
-        label="Author Name"
-        value={author}
-        onChange={(e) => setAuthor(e.target.value)}
-      />
-      <TextField
-        variant="filled"
-        label="Cover URL"
-        value={coverUrl}
-        onChange={(e) => setCoverUrl(e.target.value)}
-      />
-      {bookFormState?.isLent === true && (
-        <div>
+    <Dialog open={bookFormState !== null} slots={{ transition: Transition }}>
+      <DialogContent>
+        <DialogTitle>
+          {bookFormState !== "add" ? "Edit Book Info" : "Add Book"}
+        </DialogTitle>
+        <form id="book-form" onSubmit={handleSubmit}>
           <TextField
-            variant="filled"
-            label="Lent to:"
-            defaultValue={lentTo}
-            onChange={(e) => setLentTo(e.target.value)}
+            label="Title"
+            value={title}
+            ref={inputRef}
+            onChange={(e) => setTitle(e.target.value)}
           />
           <TextField
-            variant="filled"
-            label="Lent on:"
-            defaultValue={lentDate}
-            onChange={(e) => setLentDate(e.target.value)}
+            label="Author Name"
+            value={author}
+            onChange={(e) => setAuthor(e.target.value)}
           />
-        </div>
-      )}
-      <Button variant="contained" color="success" type="submit">
-        {bookFormState !== "add" ? "Save Changes" : "Add Book"}
-      </Button>
-      <Button variant="contained" onClick={() => setBookFormState(null)}>
-        Cancel
-      </Button>
-      {errorMessage && <Alert severity="warning">{errorMessage}</Alert>}
-    </form>
+          <TextField
+            label="Cover URL"
+            value={coverUrl}
+            onChange={(e) => setCoverUrl(e.target.value)}
+          />
+          {bookFormState?.isLent === true && (
+            <div>
+              <TextField
+                label="Lent to:"
+                defaultValue={lentTo}
+                onChange={(e) => setLentTo(e.target.value)}
+              />
+              <DatePicker
+                label="Lent on"
+                value={lentDate ? dayjs(lentDate) : dayjs()}
+                onChange={(newValue) =>
+                  setLentDate(newValue.format("YYYY-MM-DD"))
+                }
+              />
+              {errorMessage && <Alert severity="warning">{errorMessage}</Alert>}
+            </div>
+          )}
+        </form>
+      </DialogContent>
+      <DialogActions>
+        <Button
+          form="book-form"
+          variant="contained"
+          color="success"
+          type="submit"
+        >
+          {bookFormState !== "add" ? "Save Changes" : "Add Book"}
+        </Button>
+        <Button variant="contained" onClick={() => setBookFormState(null)}>
+          Cancel
+        </Button>
+      </DialogActions>
+    </Dialog>
   );
 }
