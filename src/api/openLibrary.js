@@ -24,7 +24,6 @@ export async function fetchBookByISBN(isbn) {
       const workResponse = await axios.get(
         `https://openlibrary.org${workKey}.json`,
       );
-      const workData = workResponse.data;
 
       if (workResponse.data.authors && workResponse.data.authors.length > 0) {
         const authorKey = workResponse.data.authors[0].author.key;
