@@ -12,8 +12,8 @@ export default function SortBar({
 }) {
   return (
     <>
-      <Typography variant="subtitle2">Sort by</Typography>
       <div style={{ display: "flex", alignItems: "center", gap: "8px" }}>
+      <Typography variant="subtitle2">Sort by:</Typography>
         <ButtonGroup>
           <Button
             variant={activeSort === "title" ? "contained" : "outlined"}
@@ -45,39 +45,19 @@ export default function SortBar({
           </Button>
         </ButtonGroup>
         {/* <Typography variant="subtitle2">Sort descending?</Typography> */}
-        <div
+        <Button
+          variant="outlined"
+          color="primary"
           onClick={() => setSortAscending(!sortAscending)}
-          style={{
-            cursor: "pointer",
-            position: "relative",
-            width: "24px",
-            height: "35px",
-          }}
+          sx={{ minWidth: "36px", padding: "4px", alignSelf: 'stretch' }}
         >
-          <ArrowDropUpIcon
-            sx={{
-              color: sortAscending ? "#ccc" : "primary.main",
-              position: "absolute",
-              top: "-4px",
-              left: 0,
-              fontSize: "30px",
-            }}
-          />
-          <ArrowDropDownIcon
-            sx={{
-              color: sortAscending ? "primary.main" : "#ccc",
-              position: "absolute",
-              bottom: "-4px",
-              left: 0,
-              fontSize: "30px",
-            }}
-          />
-        </div>
+          {sortAscending ? (
+            <ArrowDropUpIcon sx={{ fontSize: "26px" }} />
+          ) : (
+            <ArrowDropDownIcon sx={{ fontSize: "26px" }} />
+          )}
+        </Button>
       </div>
-      {/* <Switch
-        onChange={() => setSortAscending(sortAscending ? false : true)}
-        checked={sortAscending}
-      /> */}
     </>
   );
 }

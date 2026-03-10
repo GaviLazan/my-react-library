@@ -81,12 +81,26 @@ export default function BookFormModal({
   }, []);
 
   return (
-    <Dialog open={bookFormState !== null} slots={{ transition: Transition }}>
+    <Dialog
+      open={bookFormState !== null}
+      slots={{ transition: Transition }}
+      transitionDuration={{ enter: 150, exit: 300 }}
+      onClose={() => setBookFormState(null)}
+    >
       <DialogContent>
         <DialogTitle>
           {bookFormState !== "add" ? "Edit Book Info" : "Add Book"}
         </DialogTitle>
-        <form id="book-form" onSubmit={handleSubmit}>
+        <form
+          id="book-form"
+          onSubmit={handleSubmit}
+          style={{
+            display: "flex",
+            flexDirection: "column",
+            gap: "12px",
+            minWidth: "380px",
+          }}
+        >
           <TextField
             label="Title"
             value={title}
@@ -104,7 +118,7 @@ export default function BookFormModal({
             onChange={(e) => setCoverUrl(e.target.value)}
           />
           {bookFormState?.isLent === true && (
-            <div>
+            <div style={{ display: "flex", gap: "12px", alignItems: "center" }}>
               <TextField
                 label="Lent to:"
                 defaultValue={lentTo}

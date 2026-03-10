@@ -8,8 +8,15 @@ import FilterBar from "./components/FilterBar";
 import SortBar from "./components/SortBar";
 import LentStatusPanel from "./components/LentStatusPanel";
 import LibraryStatsBar from "./components/LibraryStatsBar";
-import Button from "@mui/material/Button";
 import TextField from "@mui/material/TextField";
+import Snackbar from "@mui/material/Snackbar";
+import Alert from "@mui/material/Alert";
+import Skeleton from "@mui/material/Skeleton";
+import Typography from "@mui/material/Typography";
+import SearchIcon from "@mui/icons-material/Search";
+import ClearIcon from "@mui/icons-material/Clear";
+import { IconButton } from "@mui/material";
+import { Divider } from "@mui/material";
 
 export default function App() {
   const [books, setBooks] = useState([]);
@@ -20,11 +27,19 @@ export default function App() {
   const [searchTerm, setSearchTerm] = useState("");
   const [bookFormState, setBookFormState] = useState(null);
 
+  const [snackbar, setSnackbar] = useState({
+    open: false,
+    message: "",
+    severity: "success",
+  });
+  const [isLoading, setIsLoading] = useState(true);
+
   useEffect(() => {
     seedLibrary();
     const bookList = getBooks();
     // eslint-disable-next-line react-hooks/set-state-in-effect
     setBooks(bookList);
+    setIsLoading(false);
   }, []);
 
   function handleAddBook(bookData) {
@@ -42,11 +57,14 @@ export default function App() {
     const updatedBooks = [...books, newBook];
     setBooks(updatedBooks);
     saveBooks(updatedBooks);
+    showSnackbar(`${newBook.title} added successfully`);
     setBookFormState(null);
   }
 
   function handleDelete(bookId) {
+    const deletedBook = books.find((book) => book.id === bookId);
     const updatedBooks = books.filter((book) => book.id !== bookId);
+    showSnackbar(`${deletedBook.title} has been deleted`);
     setBooks(updatedBooks);
     saveBooks(updatedBooks);
   }
@@ -57,6 +75,7 @@ export default function App() {
     );
     setBooks(updatedBooks);
     saveBooks(updatedBooks);
+    showSnackbar(`${updatedData.title} edited successfully`);
     setBookFormState(null);
   }
 
@@ -159,69 +178,136 @@ export default function App() {
     }
   });
 
+  // snackbar functions
+  const showSnackbar = (message, severity = "success") => {
+    setSnackbar({ open: true, message, severity });
+  };
+  const handleSnackbarClose = () => {
+    setSnackbar({ ...snackbar, open: false });
+  };
   return (
     <div>
-      <h1>My Library</h1>
-      <AddBookForm
-        onAddBook={handleAddBook}
-        onEditBook={handleEditBook}
-        bookFormState={bookFormState}
-        setBookFormState={setBookFormState}
-      />
-      <Button variant="contained" onClick={() => setBookFormState("add")}>
-        Add Book Manually
-      </Button>
-      {bookFormState && (
-        <BookFormModal
-          onAddBook={handleAddBook}
-          onEditBook={handleEditBook}
-          bookFormState={bookFormState}
-          setBookFormState={setBookFormState}
+      <div className="top-bar">
+        <Typography
+          className="title"
+          variant="h3"
+          gutterBottom
+          style={{
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
+            gap: "12px",
+            fontSize: "36px",
+          }}
+        >
+          <img
+            src="/noun-library-2403.svg"
+            alt=""
+            style={{ width: "32px", height: "32px" }}
+          />
+          Pages Pending
+        </Typography>
+        <div className="add-zone">
+          <AddBookForm
+            onAddBook={handleAddBook}
+            setBookFormState={setBookFormState}
+            showSnackbar={showSnackbar}
+          />
+          {bookFormState && (
+            <BookFormModal
+              onAddBook={handleAddBook}
+              onEditBook={handleEditBook}
+              bookFormState={bookFormState}
+              setBookFormState={setBookFormState}
+            />
+          )}{" "}
+        </div>
+        <Divider
+          orientation="horizontal"
+          flexItem
+          sx={{ width: "50%", alignSelf: "center" }}
         />
-      )}{" "}
-      <br />
-      <FilterBar
-        activeFilter={activeFilter}
-        handleFilterChange={handleFilterChange}
-        lentFilter={lentFilter}
-        setLentFilter={setLentFilter}
-      />
-      <br />
-      <SortBar
-        activeSort={activeSort}
-        handleSortChange={handleSortChange}
-        sortAscending={sortAscending}
-        setSortAscending={setSortAscending}
-      />
-      <br />
-      <TextField
-        label="Search"
-        type="text"
-        value={searchTerm}
-        onChange={(e) => {
-          setSearchTerm(e.target.value);
-          setSortAscending(false);
-        }}
-      />
-      {searchTerm !== "" && sortedBooks.length === 0 && (
-        <p>No books matching {searchTerm}</p>
-      )}
-      {activeFilter !== "all" && sortedBooks.length === 0 && (
-        <p>No books in {activeFilter}</p>
-      )}
-      {sortedBooks.length > 0 && (
-        <BookGrid
-          books={sortedBooks}
-          onDelete={handleDelete}
-          onStatusChange={handleStatusChange}
-          onLendBook={handleLendBook}
-          onReturnBook={handleReturnBook}
-          onRatingChange={handleRatingChange}
-          setBookFormState={setBookFormState}
-        />
-      )}
-      <LentStatusPanel books={books} />
-      <LibraryStatsBar books={books} />
+        <div className="controls-zone">
+          <TextField
+            slotProps={{
+              input: {
+                startAdornment: <SearchIcon sx={{ color: "#888", mr: 1 }} />,
+                endAdornment: searchTerm && (
+                  <IconButton size="small" onClick={() => setSearchTerm("")}>
+                    <ClearIcon fontSize="small" />
+                  </IconButton>
+                ),
+              },
+            }}
+            sx={{ width: "220px" }}
+            size="small"
+            label="Search"
+            type="text"
+            value={searchTerm}
+            onChange={(e) => {
+              setSearchTerm(e.target.value);
+              setSortAscending(false);
+            }}
+          />
+          <FilterBar
+            activeFilter={activeFilter}
+            handleFilterChange={handleFilterChange}
+            lentFilter={lentFilter}
+            setLentFilter={setLentFilter}
+          />
+          <SortBar
+            activeSort={activeSort}
+            handleSortChange={handleSortChange}
+            sortAscending={sortAscending}
+            setSortAscending={setSortAscending}
+          />
+        </div>
+        <div style={{ textAlign: "center", padding: "8px 0" }}>
+          {searchTerm !== "" && sortedBooks.length === 0 && (
+            <p>No books matching {searchTerm}</p>
+          )}
+          {activeFilter !== "all" && sortedBooks.length === 0 && (
+            <p>No books in {activeFilter}</p>
+          )}
+        </div>
+      </div>
+      <div className="content-area">
+        <div className="side-panel">
+          <LentStatusPanel books={books} />
+          <hr />
+          <LibraryStatsBar books={books} />
+        </div>
+        {isLoading && (
+          <div className="book-grid">
+            {Array.from({ length: 8 }).map((_, i) => (
+              <Skeleton
+                key={i}
+                variant="rectangular"
+                width={200}
+                height={320}
+              />
+            ))}
+          </div>
+        )}
+        {sortedBooks.length > 0 && (
+          <BookGrid
+            books={sortedBooks}
+            onDelete={handleDelete}
+            onStatusChange={handleStatusChange}
+            onLendBook={handleLendBook}
+            onReturnBook={handleReturnBook}
+            onRatingChange={handleRatingChange}
+            setBookFormState={setBookFormState}
+          />
+        )}
+      </div>
+      <Snackbar
+        open={snackbar.open}
+        autoHideDuration={3000}
+        onClose={handleSnackbarClose}
+      >
+        <Alert severity={snackbar.severity}>{snackbar.message}</Alert>
+      </Snackbar>
       <footer>
         Book data provided by{" "}
         <a href="https://openlibrary.org" target="_blank">

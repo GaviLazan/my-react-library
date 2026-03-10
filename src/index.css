@@ -1,37 +1,154 @@
+/* ============================================================
+   RESET
+   ============================================================ */
+
 * {
   box-sizing: border-box;
   margin: 0;
   padding: 0;
 }
 
+/* ============================================================
+   BASE
+   ============================================================ */
+
 body {
   font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
   padding: 20px;
-  background: #f5f5f5;
+  padding-bottom: 70px;
+}
+
+/* ============================================================
+   LAYOUT
+   ============================================================ */
+
+.title {
+  text-align: center;
+}
+
+.top-bar {
+  display: flex;
+  flex-direction: column;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.08);
+  padding-bottom: 8px;
+  margin-bottom: 16px;
+  background-color: #fffaf9;
+  margin-left: -20px;
+  margin-right: -20px;
+  padding-left: 20px;
+  padding-right: 20px;
+}
+
+.add-zone {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 10px 10px 10px 10px;
+  justify-content: center;
+}
+
+.add-book-form {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.controls-zone {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  gap: 12px;
+  padding: 10px 10px 10px 10px;
+  align-items: center;
+  justify-content: center;
+}
+
+.lent-toggle {
+  display: flex;
+  align-items: center;
+  gap: 2px;
+}
+
+.lent-toggle .MuiSwitch-root {
+  margin-left: -2px;
+}
+
+.content-area {
+  display: flex;
+  flex-direction: row;
+  gap: 20px;
+  margin-top: 20px;
+  align-items: flex-start;
+}
+
+.side-panel {
+  width: 220px;
+  flex-shrink: 0;
+  background: white;
+  border-radius: 8px;
+  padding: 16px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.08);
+  font-size: 13px;
+}
+
+.side-panel p {
+  margin-bottom: 6px;
+  font-size: 12px;
+}
+
+hr {
+  border: none;
+  border-top: 1px solid rgba(0, 0, 0, 0.08);
+  margin: 12px 8px;
 }
 
 .book-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(150px, max-content));
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
   gap: 20px;
-  margin-top: 20px;
   justify-content: start;
 }
 
+/* ============================================================
+   SIDE PANEL
+   ============================================================ */
+
+.lent-panel h3,
+.stats-bar h3 {
+  font-size: 15px;
+  font-weight: 600;
+  color: #1a1a1a;
+  margin-bottom: 12px;
+}
+
+.stats-bar > div {
+  margin-bottom: 4px;
+}
+
+/* ============================================================
+   BOOK CARD
+   ============================================================ */
+
 .book-card {
   position: relative;
-  background: white;
-  border-radius: 8px;
-  padding: 12px;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  width: 180px;
+  height: 470px;
   display: flex;
   flex-direction: column;
+  overflow: visible;
+  transition: box-shadow 0.2s ease;
+}
+
+.book-card:hover {
+  box-shadow: 0 4px 12px rgba(0,0,0,0.15);
 }
 
 .book-card .cover-placeholder {
-  width: 130px;
-  height: 200px;
+  width: 180px;
+  height: 270px;
   background: #9575cd;
+  object-fit: fill;
   border-radius: 4px;
   display: flex;
   align-items: center;
@@ -45,7 +162,6 @@ body {
 }
 
 .book-card h3 {
-  margin-top: 10px;
   font-size: 14px;
   font-weight: 600;
   overflow: hidden;
@@ -55,32 +171,46 @@ body {
   line-clamp: 2;
   -webkit-box-orient: vertical;
   flex-grow: 0;
+  height: 40px;
 }
 
 .book-card p {
   font-size: 12px;
   color: #666;
   margin-top: 4px;
-  margin-top: auto;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  line-clamp: 2;
+  -webkit-box-orient: vertical;
+  height: 35px;
 }
 
-.status-select {
-  margin-top: 8px;
+.MuiCardContent-root {
+  padding-top: 10px !important;
+  padding-bottom: 10px !important;
 }
 
-/* Style based on selected value */
+.status-button {
+  display: flex;
+  justify-content: center;
+}
+
+ /* --- Status variants --- */
+
 .book-card[data-status="tbr"] {
-  background-color: #fff3cd;
+  background-color: hsl(46, 100%, 95%);
   color: #6b5104;
 }
 
 .book-card[data-status="reading"] {
-  background-color: #cfe2ff;
+  background-color: hsl(218, 100%, 93%);
   color: #084298;
 }
 
 .book-card[data-status="read"] {
-  background-color: #d1e7dd;
+  background-color: hsl(153, 31%, 90%);
   color: #0f5132;
 }
 
@@ -89,9 +219,13 @@ body {
   color: #842029;
 }
 
-/* Style based on lend state */
+/* --- Lent state --- */
 
-.lent img {
+.book-card.lent {
+  background-color: #a3a3a35e;
+}
+
+.lent .MuiCardMedia-root {
   filter: grayscale(1);
   opacity: 0.3;
 }
@@ -101,9 +235,9 @@ body {
   opacity: 0.5;
 }
 
-.book-card.lent {
-  background-color: #a3a3a35e;
-}
+/* ============================================================
+   FOOTER
+   ============================================================ */
 
 footer {
   position: fixed;
@@ -124,4 +258,55 @@ footer a {
 
 footer a:hover {
   text-decoration: underline;
+}
+
+@media (max-width: 600px) {
+  .content-area {
+    flex-direction: column;
+  }
+
+  
+  .side-panel {
+    width: 100%;
+  }
+
+  .book-grid {
+    justify-content: center;
+  }
+
+  .book-card {
+  height: auto;
+  width: 185px;
+}
+
+.book-card .MuiCardContent-root {
+  display: flex;
+  flex-direction: column;
+}
+
+.book-card h3 {
+  height: 40px;
+}
+
+.book-card p {
+  height: 35px;
+}
+
+.book-card .MuiCardMedia-root {
+  height: 290px;
+  object-fit:fill ;
+  
+}
+
+.book-card .cover-placeholder {
+  height: 200px;
+}
+
+  .book-card h3 {
+    height: auto;
+  }
+
+  .book-card p {
+    height: auto;
+  }
 }

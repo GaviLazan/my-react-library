@@ -1,5 +1,7 @@
 import Button from "@mui/material/Button";
 import Switch from "@mui/material/Switch";
+import { Tooltip } from "@mui/material";
+import Divider from "@mui/material/Divider";
 
 export default function FilterBar({
   activeFilter,
@@ -9,69 +11,92 @@ export default function FilterBar({
 }) {
   return (
     <>
-      <Button
-        variant={activeFilter === "all" ? "contained" : "outlined"}
-        color="primary"
-        onClick={() => handleFilterChange("all")}
-      >
-        All
-      </Button>
-      <Button
-        variant={activeFilter === "untagged" ? "contained" : "outlined"}
-        color="secondary"
-        onClick={() => handleFilterChange("untagged")}
-      >
-        Untagged
-      </Button>
-      <Button
-        variant={activeFilter === "tbr" ? "contained" : "outlined"}
-        sx={
-          activeFilter === "tbr"
-            ? { backgroundColor: "#fff3cd", color: "#6b5104" }
-            : { color: "#6b5104", borderColor: "#6b5104" }
-        }
-        onClick={() => handleFilterChange("tbr")}
-      >
-        TBR
-      </Button>
-      <Button
-        variant={activeFilter === "reading" ? "contained" : "outlined"}
-        sx={
-          activeFilter === "reading"
-            ? { backgroundColor: "#cfe2ff", color: "#084298" }
-            : { color: "#084298", borderColor: "#084298" }
-        }
-        onClick={() => handleFilterChange("reading")}
-      >
-        Currently Reading
-      </Button>
-      <Button
-        variant={activeFilter === "read" ? "contained" : "outlined"}
-        sx={
-          activeFilter === "read"
-            ? { backgroundColor: "#d1e7dd", color: "#0f5132" }
-            : { color: "#0f5132", borderColor: "#0f5132" }
-        }
-        onClick={() => handleFilterChange("read")}
-      >
-        Read
-      </Button>
-      <Button
-        variant={activeFilter === "dnf" ? "contained" : "outlined"}
-        sx={
-          activeFilter === "dnf"
-            ? { backgroundColor: "#f8d7da", color: "#842029" }
-            : { color: "#842029", borderColor: "#842029" }
-        }
-        onClick={() => handleFilterChange("dnf")}
-      >
-        DNF
-      </Button>
-      <label> Hide Lent Books</label>
-      <Switch
-        onChange={() => setLentFilter(lentFilter ? false : true)}
-        checked={lentFilter}
-      />
+    <div style={{ display: 'flex', overflowX: 'auto', gap: '8px' }}>
+      <Tooltip title="All Books">
+        <Button
+          variant={activeFilter === "all" ? "contained" : "outlined"}
+          color="primary"
+          onClick={() => handleFilterChange("all")}
+        >
+          All
+        </Button>
+      </Tooltip>
+      <Tooltip title="Untagged Books">
+        <Button
+          variant={activeFilter === "untagged" ? "contained" : "outlined"}
+          color="secondary"
+          sx={
+            activeFilter === "tbr"
+              ? {}
+              : { color: "#505050" }
+          }
+          onClick={() => handleFilterChange("untagged")}
+        >
+          Untagged
+        </Button>
+      </Tooltip>
+      <Tooltip title="To Be Read">
+        <Button
+          variant={activeFilter === "tbr" ? "contained" : "outlined"}
+          sx={
+            activeFilter === "tbr"
+              ? { backgroundColor: "#fff9e6", color: "#8b6914" }
+              : { color: "#8b6914" }
+          }
+          onClick={() => handleFilterChange("tbr")}
+        >
+          TBR
+        </Button>
+      </Tooltip>
+      <Tooltip title="Currently Reading">
+        <Button
+          variant={activeFilter === "reading" ? "contained" : "outlined"}
+          sx={
+            activeFilter === "reading"
+              ? { backgroundColor: "#e6f2ff", color: "#1e5a99" }
+              : { color: "#1e5a99" }
+          }
+          onClick={() => handleFilterChange("reading")}
+        >
+          Reading
+        </Button>
+      </Tooltip>
+      <Tooltip title="Read Books">
+        <Button
+          variant={activeFilter === "read" ? "contained" : "outlined"}
+          sx={
+            activeFilter === "read"
+              ? { backgroundColor: "#e8f5e9", color: "#2e7d32" }
+              : { color: "#2e7d32" }
+          }
+          onClick={() => handleFilterChange("read")}
+        >
+          Read
+        </Button>
+      </Tooltip>
+      <Tooltip title="Did Not Finish">
+        <Button
+          variant={activeFilter === "dnf" ? "contained" : "outlined"}
+          sx={
+            activeFilter === "dnf"
+              ? { backgroundColor: "#ffebee", color: "#c62828" }
+              : { color: "#c62828" }
+          }
+          onClick={() => handleFilterChange("dnf")}
+        >
+          DNF
+        </Button>
+      </Tooltip>
+        </div>
+      <Divider orientation="vertical" flexItem />
+      <div className="lent-toggle">
+        <label>Hide Lent Books</label>
+        <Switch
+          onChange={() => setLentFilter(lentFilter ? false : true)}
+          checked={lentFilter}
+        />
+        <Divider orientation="vertical" flexItem />
+      </div>
     </>
   );
 }

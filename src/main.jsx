@@ -9,15 +9,26 @@ import CssBaseline from "@mui/material/CssBaseline";
 import "dayjs/locale/en-gb";
 
 const theme = createTheme({
+  components: {
+    MuiButton: {
+      styleOverrides: {
+        root: {
+          textTransform: "none",
+        },
+      },
+    },
+  },
   palette: {
     primary: {
       main: "#507993",
     },
     secondary: {
       main: "#D4B99E",
+      contrastText: "#ffffff",
     },
     success: {
       main: "#7AAC6C",
+      contrastText: "#ffffff",
     },
     background: {
       default: "#FFF5F3",
@@ -27,6 +38,17 @@ const theme = createTheme({
     },
     warning: {
       main: "#F29325",
+    },
+  },
+  typography: {
+    h3: {
+      fontWeight: 500,
+    },
+    button: {
+      fontWeight: 500,
+    },
+    body1: {
+      fontWeight: 400,
     },
   },
 });

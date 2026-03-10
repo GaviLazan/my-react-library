@@ -1,32 +1,37 @@
-# React Library Tracker
+# Pages Pending - A Personal Library Tracker
 
-A personal library management app built with React, allowing you to track your book collection, reading status, lending history, and ratings.
+Personal library management app built with React, allowing you to track your book collection, reading status, lending history, and ratings.
 
 ## Tech Stack
 
 - **React** (via Vite)
 - **localStorage** for data persistence
 - **axios** for API calls
-- **MUI (Material UI)** — installed but not used until Sprint 3
+- **MUI (Material UI)** — `@mui/material`, `@mui/icons-material`, `@mui/x-date-pickers`
+- **dayjs** — date handling for the date picker
 
 ## Features
 
 ### Core Features
 
-- Add books via ISBN (Open Library API)
-- Add books manually (title + author + cover URL) via modal form
-- Delete books with confirmation dialog
+- Add books via ISBN (Open Library API) with loading indicator
+- Add books manually (title + author + cover URL) via MUI Dialog modal
+- Delete books with MUI Dialog confirmation
 - Track reading status: Untagged, To Be Read, Currently Reading, Read, Did Not Finish
-- Lend books to friends with tracking (borrower name, lent date, overdue alerts)
+- Lend books to friends with tracking (borrower name, lent date with date picker, overdue alerts)
 - Return books
-- Rate books 1-5 stars
+- Rate books 1-5 stars (MUI Rating)
 - Real-time search by title or author
 - Filter by status and toggle lent book visibility
 - Sort by title, author name, rating, or date added (ascending/descending)
 - Library statistics dashboard
 - Lent out stats panel with human-readable duration
-- Edit book information (title, author, cover URL, lent info)
+- Edit book information (title, author, cover URL, lent info) via MUI Dialog
 - Empty state messages for filtered/search results
+- Snackbar notifications for add, edit, and delete actions
+- Skeleton loading states for initial grid and individual cover images
+- Overdue indicator: growing red top border (scales from 2px at 4 weeks to 10px at 6 months)
+- Tooltips on truncated titles, author names, and lent info
 
 ### Data Model
 
@@ -70,7 +75,7 @@ src/
 
 ```bash
 # Clone the repo
-git clone https://github.com/GaviLazan/my-react-library.git
+git clone https://github.com/GaviLazan/pages-pending.git
 cd my-react-library
 
 # Install dependencies
@@ -81,6 +86,17 @@ npm run dev
 ```
 
 Visit `http://localhost:5173` in your browser.
+
+## Color Palette
+
+| Role                   | Color     |
+| ---------------------- | --------- |
+| Primary                | `#507993` |
+| Secondary              | `#D4B99E` |
+| Success (save/confirm) | `#7AAC6C` |
+| Info (return book)     | `#F2CA50` |
+| Warning                | `#F29325` |
+| Background             | `#FFF5F3` |
 
 ## Development Timeline
 
@@ -98,11 +114,11 @@ Visit `http://localhost:5173` in your browser.
 
 - Open Library API integration with author fallback logic
 - AddBookForm component (ISBN input + Enter key support)
-- Delete with browser confirm() dialog
+- Delete with confirmation
 - Status selector (null/TBR/reading/read/DNF)
-- Card visual indicators by status (colored cards)
-- Lending system (lend/return with borrower name and auto-generated date)
-- Gradual red glow on lent cards (starts at 4 weeks, maxes at 6 months)
+- Card visual indicators by status
+- Lending system (lend/return with borrower name and date tracking)
+- Gradual overdue indicator (starts at 4 weeks, maxes at 6 months)
 - Lent cards show borrower name and date instead of author
 - Dates stored as ISO format (yyyy-mm-dd), displayed as dd/mm/yyyy
 - Auto-save to localStorage on all changes
@@ -118,28 +134,45 @@ Visit `http://localhost:5173` in your browser.
 - Empty state messages ("No books matching X" / "No books in X")
 - Lent out stats panel with human-readable duration (today / days / weeks / months / years)
 - Library stats bar (total, read, reading, on loan)
-- BookFormModal: combined add and edit form (modal wrapper deferred to Sprint 3)
+- BookFormModal: combined add and edit form
 - Edit button on each card
 - Open Library + favicon attribution in footer
-- Inline validation for lend form, manual add, and image URL (no browser alerts)
+- Inline validation for all forms
 - Image URL validated via new Image() load test
 - useRef auto-focus on lender name input when lend form opens
 
-### Sprint 3: MUI Polish & QA *(upcoming)*
+### Sprint 3: MUI Polish & QA
 
-- Auto-focus ISBN input on page load; auto-focus title field when BookFormModal opens
-- Replace plain HTML with MUI components (Button, TextField, Select, Card, Dialog, Rating, Chip, Tooltip)
-- Convert BookFormModal and lend form to MUI Dialog overlays (with background disable and click-outside-to-close)
-- Replace browser confirm() with MUI Dialog for delete confirmation
-- Replace star rating spans with MUI Rating component
-- Add optional date picker for lend date (defaults to today)
-- MUI Tooltips on truncated titles
-- Card glow/elevation based on status
+- App renamed to **Pages Pending**
+
+#### UI Polish Pass
+
+- MUI Theme with Ocean Breeze palette (`ThemeProvider` + `CssBaseline` in `main.jsx`)
+- `LocalizationProvider` with `AdapterDayjs` (en-gb locale) for date picker
+- useRef autofocus: ISBN input on page load, title field when BookFormModal opens
+- All buttons replaced with MUI `Button` / `IconButton`
+- All text inputs replaced with MUI `TextField` (with `error` + `helperText` for field-level errors, `Alert` for form-level errors)
+- Status dropdown replaced with `Button` + `Menu` pattern (colored label reflects current status)
+- Sort bar redesigned as MUI Button group with arrow icon toggle
+- Filter bar uses MUI Buttons with status-matched `sx` colors and `Switch` for lent toggle
+- Delete confirmation replaced with MUI `Dialog`
+- BookFormModal and lend form converted to MUI `Dialog` overlays with `Slide` transition
+- `form` + `id` attribute pattern connects submit buttons in `DialogActions` to forms in `DialogContent`
+- Star rating replaced with MUI `Rating` component
+- Date picker added to lend form and edit modal (`DatePicker` from `@mui/x-date-pickers`)
+- BookCard wrapped in MUI `Card` with `CardMedia` and `CardContent`
+- MUI `Tooltip` on truncated titles, author names, and lent info
+- Overdue indicator: growing red top border (replaces red glow box-shadow)
+- Bottom icon buttons on cards: Edit (EditNote), Lend/Return (FileUpload/FileDownload), Delete
+- Snackbar notifications for add, edit, and delete (app-level state in App.jsx)
+- Skeleton loading: card grid on initial load, individual cover images while loading
+- Footer overlap fixed
+
 - Responsive layout review
 - Cross-browser testing (Chrome + Firefox minimum)
 - Remove all console.log statements
 - Verify localStorage seed works on fresh browser
-- Write demo script / talking points
+- Build Presentation and write demo script / talking points
 
 ## Data Persistence
 
@@ -194,10 +227,8 @@ This project was built as part of the SheCodes bootcamp React module. The origin
 - Data persistence with localStorage
 - API integration and error handling
 - Component-driven architecture
-- MUI integration
+- MUI component library integration
 - Project planning and sprint-based development
-
-**MUI integration** is deferred to Sprint 3 to focus on React fundamentals first.
 
 ## Post-Presentation Enhancements
 
@@ -207,9 +238,11 @@ This project was built as part of the SheCodes bootcamp React module. The origin
 4. **Export/import library data**
 5. **Drag and drop manual sorting**
 6. **Lent duration refinement** (e.g. "1 year 3 months 2 weeks")
+7. **Undo delete**
+8. **Image caching** (requires backend)
 
 ---
 
 **Built by:** Gavi Lazan  
 **Course:** SheCodes Fullstack Bootcamp
-**Last Updated:** March 3, 2026
+**Last Updated:** March 9, 2026
