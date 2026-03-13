@@ -321,7 +321,11 @@ export default function BookCard({
             >
               <DialogTitle>Lend a book</DialogTitle>
               <DialogContent>
-                <form id="lend-form" onSubmit={handleSubmitLend}>
+                <form
+                  id="lend-form"
+                  style={{ paddingTop: 7 }}
+                  onSubmit={handleSubmitLend}
+                >
                   <TextField
                     label="Lend to:"
                     type="text"

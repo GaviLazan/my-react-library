@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import { getBooks, saveBooks } from "./utils/storage";
 import seedLibrary from "./utils/seedLibrary";
+
 import BookGrid from "./components/BookGrid";
 import AddBookForm from "./components/AddBookForm";
 import BookFormModal from "./components/BookFormModal";
@@ -8,6 +9,8 @@ import FilterBar from "./components/FilterBar";
 import SortBar from "./components/SortBar";
 import LentStatusPanel from "./components/LentStatusPanel";
 import LibraryStatsBar from "./components/LibraryStatsBar";
+import ClearLibraryButton from "./components/ClearLibraryButton";
+
 import TextField from "@mui/material/TextField";
 import Snackbar from "@mui/material/Snackbar";
 import Alert from "@mui/material/Alert";
@@ -215,6 +218,7 @@ export default function App() {
             setBookFormState={setBookFormState}
             showSnackbar={showSnackbar}
           />
+        </div>
           {bookFormState && (
             <BookFormModal
               onAddBook={handleAddBook}
@@ -222,8 +226,7 @@ export default function App() {
               bookFormState={bookFormState}
               setBookFormState={setBookFormState}
             />
-          )}{" "}
-        </div>
+          )}
         <Divider
           orientation="horizontal"
           flexItem
@@ -278,6 +281,13 @@ export default function App() {
           <LentStatusPanel books={books} />
           <hr />
           <LibraryStatsBar books={books} />
+          <hr />
+          <ClearLibraryButton style={{marginLeft: "auto", marginBotton: "auto"}}
+            onClear={() => {
+              setBooks([]);
+              saveBooks([]);
+            }}
+          />
         </div>
         {isLoading && (
           <div className="book-grid">

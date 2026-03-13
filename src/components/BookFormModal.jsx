@@ -133,6 +133,7 @@ export default function BookFormModal({
                 onChange={(e) => setLentTo(e.target.value)}
               />
               <DatePicker
+                format="DD/MM/YYYY"
                 label="Lent on"
                 value={lentDate ? dayjs(lentDate) : dayjs()}
                 onChange={(newValue) =>
